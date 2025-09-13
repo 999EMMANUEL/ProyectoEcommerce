@@ -1,144 +1,167 @@
-/* Reset básico */
+/* style.css - estilos globales del layout (header, nav, footer, utilidades) */
+
+:root {
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --muted: #6c757d;
+    --accent: #28a745;
+    --border: #e9ecef;
+    --max-width: 1200px;
+    --gap: 20px;
+    --radius: 8px;
+}
+
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
+    margin: 0;
+    padding: 0
+}
+
+html, body {
+    height: 100%
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    font-family: Arial,Helvetica,sans-serif;
+    background: var(--bg);
     color: #333;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
-/* Main Content / Grid de productos */
-.main-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 30px 20px;
+/* Header */
+header {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 4px rgba(0,0,0,.04)
 }
 
-.section-title {
-    font-size: 28px;
-    font-weight: normal;
-    text-align: center;
-    margin-bottom: 30px;
-    color: #495057;
-}
-
-/* Grid de tarjetas */
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    /* auto-fill o auto-fit, eliges; minmax define mínimo ancho de tarjeta */
-    gap: 20px;
-}
-
-/* Cada tarjeta */
-.product-card {
-    background: white;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    overflow: hidden;
+.header-top {
     display: flex;
-    flex-direction: column;
-    /* para que imagen + info estén uno debajo de otro */
-    max-width: 300px; /* opcional: evitar que tarjetas crezcan demasiado en pantallas grandes */
-    margin: 0 auto;
-    transition: transform 0.2s;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 20px;
+    flex-wrap: wrap
 }
 
-    .product-card:hover {
-        transform: scale(1.02);
+.logo img {
+    display: block;
+    max-width: 100%;
+    height: auto
+}
+
+/* Search / actions */
+.search-container {
+    flex: 1;
+    max-width: 420px;
+    position: relative
+}
+
+.search-bar {
+    width: 100%;
+    padding: 10px 44px 10px 14px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px
+}
+
+.search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 7px 10px;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+/* Header actions */
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center
+}
+
+.header-btn {
+    background: #f1f3f5;
+    border: 1px solid #dfe3e6;
+    padding: 7px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #495057;
+    font-size: 14px
+}
+
+/* Navigation */
+.navigation {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 20px
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    gap: 24px
+}
+
+.nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 0;
+    font-size: 14px
+}
+
+/* Container (contenido principal) */
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 16px
+}
+
+/* Footer */
+.footer {
+    background: #fff;
+    padding: 18px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 30px
+}
+
+    .footer a {
+        color: inherit
     }
 
-/* Imagen */
-.product-image {
-    width: 500px;
-    height: 500px; /* fija la altura que quieras */
-    /* puedes cambiar 200px por otro valor; lo importante es que todas igual */
-    background-color: #f7f7f7;
-    overflow: hidden;
+/* WhatsApp flotante */
+.whatsapp-btn {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    text-decoration: none;
+    font-weight: 700;
+    z-index: 1000;
+    border: 1px solid #20c056
 }
 
-    .product-image img.card-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* recorta pero llena todo el contenedor */
-        object-position: center center;
-        display: block;
-    }
-
-/* Badges sobre la imagen */
-.product-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #dc3545;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 3px;
-    font-size: 11px;
-    font-weight: normal;
+/* Utilidades */
+.text-center {
+    text-align: center
 }
 
-    .product-badge.available {
-        background: #28a745;
-    }
-
-/* Información del producto (nombre, precio, disponibilidad) */
-.product-info {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* para que el contenido textual ocupe el espacio disponible debajo de la imagen */
+.muted {
+    color: var(--muted)
 }
 
-.product-name {
-    font-size: 16px;
-    font-weight: 600;
-    color: #212529;
-    margin-bottom: 8px;
+.hidden {
+    display: none
 }
-
-.product-category {
-    color: #6c757d;
-    font-size: 12px;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.product-availability {
-    font-size: 13px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #6c757d;
-}
-
-.status-indicator {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #28a745;
-}
-
-    .status-indicator.unavailable {
-        background: #dc3545;
-    }
-
-.product-price {
-    font-size: 18px;
-    font-weight: 600;
-    color: #212529;
-    margin-top: auto; /* empuja al fondo de la tarjeta si hay espacio extra */
-}
-
-/* Otros estilos existentes, ajusta según lo necesites */

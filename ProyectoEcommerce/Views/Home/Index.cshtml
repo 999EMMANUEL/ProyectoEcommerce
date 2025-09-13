@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
 <main class="main-content">
     <h1 class="section-title">Productos Destacados</h1>
 
@@ -17,7 +16,7 @@
                             // Decide la URL de la imagen: externa o local
                             string imgSrc = string.Empty;
                             if (!string.IsNullOrEmpty(item.ImageUrl) &&
-                            (item.ImageUrl.StartsWith("http://") || item.ImageUrl.StartsWith("https://")))
+                                (item.ImageUrl.StartsWith("http://") || item.ImageUrl.StartsWith("https://")))
                             {
                                 imgSrc = item.ImageUrl; // URL externa
                             }
@@ -25,8 +24,8 @@
                             {
                                 // Normaliza rutas locales: acepta "images/..." "/images/..." o "~/images/..."
                                 var localPath = item.ImageUrl.StartsWith("~")
-                                ? item.ImageUrl
-                                : (item.ImageUrl.StartsWith("/") ? "~" + item.ImageUrl : "~/" + item.ImageUrl.TrimStart('/'));
+                                    ? item.ImageUrl
+                                    : (item.ImageUrl.StartsWith("/") ? "~" + item.ImageUrl : "~/" + item.ImageUrl.TrimStart('/'));
                                 imgSrc = Url.Content(localPath);
                             }
                             else
@@ -67,3 +66,8 @@
 </main>
 
 <a href="#" class="whatsapp-btn" title="Contactar por WhatsApp">W</a>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+

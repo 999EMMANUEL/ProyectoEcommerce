@@ -1,0 +1,135 @@
+/* home.css - estilos específicos para Views/Home/Index.cshtml */
+
+/* Sección principal */
+.main-content {
+    padding: 28px 0
+}
+
+.section-title {
+    font-size: 26px;
+    text-align: center;
+    color: #2d3942;
+    margin-bottom: 22px
+}
+
+/* Grid */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    gap: 18px;
+    align-items: start;
+}
+
+/* Tarjeta */
+.product-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .16s ease, box-shadow .16s ease;
+}
+
+    .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 18px rgba(18,38,63,0.06)
+    }
+
+/* Enlace que cubre la tarjeta */
+.product-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    height: 100%;
+}
+
+/* Contenedor imagen: fija la altura para todas */
+.product-image {
+    width: 100%;
+    height: 180px; /* altura fija — cambia si quieres más grande/pequeño */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* imagen dentro del marco */
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* llena el contenedor recortando si es necesario */
+    object-position: center;
+    display: block;
+}
+
+/* Badge */
+.product-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #fff;
+    background: #dc3545
+}
+
+    .product-badge.available {
+        background: #28a745
+    }
+
+/* Info */
+.product-info {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1
+}
+
+.product-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f2d33;
+    margin-bottom: 6px
+}
+
+.product-availability {
+    font-size: 13px;
+    color: #6c757d;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #28a745
+}
+
+    .status-indicator.unavailable {
+        background: #dc3545
+    }
+
+.product-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2d33;
+    margin-top: auto
+}
+
+/* Responsivo */
+@media (max-width:600px) {
+    .product-image {
+        height: 140px
+    }
+
+    .section-title {
+        font-size: 22px
+    }
+}

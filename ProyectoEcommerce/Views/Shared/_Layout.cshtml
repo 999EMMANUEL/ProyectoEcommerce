@@ -10,7 +10,11 @@
 <body>
     <header>
         <div class="header-top">
-            <a href="#" class="logo">[LOGO]</a>
+            <!-- Razor view: Anchor Tag Helper genera el href automáticamente -->
+            <a asp-controller="Home" asp-action="Index" class="logo">
+                <img src="https://i.postimg.cc/K8Kyg8yD/Imagen1.png"
+                     width="320" height="100" alt="logo" style="display:block;" />
+            </a>
 
             <div class="search-container">
                 <input type="text" class="search-bar" placeholder="Buscar productos...">

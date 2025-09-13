@@ -54,7 +54,6 @@
 
                     <div class="product-info-clickable">
                         <h3 class="product-name">@item.Name</h3>
-                        @* Si tienes categoría como propiedad, muéstrala. Si no, omítelo. *@
                         @* <p class="product-category">@item.Category</p> *@
                         <p class="product-availability">
                             <span class="status-indicator @(item.Available ? "" : "unavailable")"></span>
@@ -87,9 +86,9 @@
     </div>
 
 </main>
-
+<a class="" href="https://wa.me/50686770094" target="_blank" rel="noopener noreferrer">
 <img src="~/images/Logos/Whats.png" class="whatsapp-btn" title="Contactar por WhatsApp"></img>
-
+</a>
 <li class="nav-item">
     <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Productos</a>
 </li>

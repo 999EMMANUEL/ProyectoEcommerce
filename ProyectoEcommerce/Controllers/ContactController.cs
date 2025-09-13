@@ -3,27 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ProyectoEcommerce.Controllers
 {
-    public class ContactsController : Controller
+    public class ContactController : Controller
     {
-        // GET: ContactsController
+        // GET: ContactController
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: ContactsController/Details/5
+        // GET: ContactController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: ContactsController/Create
+        // GET: ContactController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ContactsController/Create
+        // POST: ContactController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -38,13 +38,13 @@ namespace ProyectoEcommerce.Controllers
             }
         }
 
-        // GET: ContactsController/Edit/5
+        // GET: ContactController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: ContactsController/Edit/5
+        // POST: ContactController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -59,13 +59,13 @@ namespace ProyectoEcommerce.Controllers
             }
         }
 
-        // GET: ContactsController/Delete/5
+        // GET: ContactController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: ContactsController/Delete/5
+        // POST: ContactController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

@@ -27,6 +27,20 @@ namespace ProyectoEcommerce.Migrations
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Testimonial",
+                columns: table => new
+                {
+                    TestimonialId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Testimonial", x => x.TestimonialId);
+                });
         }
 
         /// <inheritdoc />
@@ -34,6 +48,9 @@ namespace ProyectoEcommerce.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "Testimonial");
         }
     }
 }

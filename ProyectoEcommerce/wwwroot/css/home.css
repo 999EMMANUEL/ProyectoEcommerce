@@ -1,39 +1,41 @@
-/* home.css - estilos específicos para Views/Home/Index.cshtml */
-
-/* Sección principal */
 .main-content {
-    padding: 28px 0
+    padding: 28px 0;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
 .section-title {
     font-size: 26px;
     text-align: center;
-    color: #2d3942;
-    margin-bottom: 22px
+    color: #1a365d; /* Azul marino principal */
+    margin-bottom: 22px;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(26, 54, 93, 0.1);
 }
 
 /* Grid */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 18px;
     align-items: start;
 }
 
 /* Tarjeta */
 .product-card {
-    background: #fff;
-    border: 1px solid #eee;
-    border-radius: 10px;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform .16s ease, box-shadow .16s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(26, 54, 93, 0.08);
 }
 
     .product-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 6px 18px rgba(18,38,63,0.06)
+        transform: translateY(-6px);
+        box-shadow: 0 8px 25px rgba(26, 54, 93, 0.15);
+        border-color: #dc2626; /* Borde rojo en hover */
     }
 
 /* Enlace que cubre la tarjeta */
@@ -47,89 +49,177 @@
 /* Contenedor imagen: fija la altura para todas */
 .product-image {
     width: 100%;
-    height: 180px; /* altura fija — cambia si quieres más grande/pequeño */
+    height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fafafa;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
     position: relative;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 2px solid #e2e8f0;
 }
 
 /* imagen dentro del marco */
 .card-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* llena el contenedor recortando si es necesario */
+    object-fit: cover;
     object-position: center;
     display: block;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .card-img {
+    transform: scale(1.05);
 }
 
 /* Badge */
 .product-badge {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 6px 8px;
-    border-radius: 6px;
+    top: 12px;
+    right: 12px;
+    padding: 6px 10px;
+    border-radius: 8px;
     font-size: 12px;
-    color: #fff;
-    background: #dc3545
+    font-weight: 600;
+    color: #ffffff;
+    background: #dc2626; /* Rojo InnovaTech */
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
 }
 
     .product-badge.available {
-        background: #28a745
+        background: #059669; /* Verde complementario */
+        box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
     }
 
 /* Info */
 .product-info {
-    padding: 12px 14px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1
+    flex-grow: 1;
+    background: #ffffff;
 }
 
 .product-name {
-    font-size: 15px;
-    font-weight: 600;
-    color: #1f2d33;
-    margin-bottom: 6px
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a365d; /* Azul marino principal */
+    margin-bottom: 8px;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+}
+
+.product-link:hover .product-name {
+    color: #dc2626; /* Rojo en hover */
 }
 
 .product-availability {
     font-size: 13px;
-    color: #6c757d;
-    margin-bottom: 10px;
+    color: #64748b; /* Gris azulado */
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
-    gap: 8px
+    gap: 8px;
+    font-weight: 500;
 }
 
 .status-indicator {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background: #28a745
+    background: #059669; /* Verde disponible */
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
 }
 
     .status-indicator.unavailable {
-        background: #dc3545
+        background: #dc2626; /* Rojo no disponible */
+        box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
     }
 
 .product-price {
-    font-size: 16px;
-    font-weight: 700;
-    color: #1f2d33;
-    margin-top: auto
+    font-size: 18px;
+    font-weight: 800;
+    color: #1a365d; /* Azul marino principal */
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Efectos adicionales */
+.product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #dc2626 0%, #1a365d 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover::before {
+    opacity: 1;
 }
 
 /* Responsivo */
-@media (max-width:600px) {
+@media (max-width: 600px) {
     .product-image {
-        height: 140px
+        height: 140px;
     }
 
     .section-title {
-        font-size: 22px
+        font-size: 22px;
+    }
+
+    .product-info {
+        padding: 12px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 12px;
     }
 }
+
+/* Animación de entrada */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+    /* Retraso escalonado para las tarjetas */
+    .product-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .product-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .product-card:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .product-card:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .product-card:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    .product-card:nth-child(6) {
+        animation-delay: 0.6s;
+    }

@@ -1,14 +1,17 @@
-﻿/* Controles de accesibilidad */
+﻿/* Controles de accesibilidad - InnovaTech Theme */
+/* Paleta: Azul marino #1a365d, Rojo #dc2626, Blanco #ffffff */
+
 .accessibility-panel {
     position: fixed;
     top: 100px;
     right: 20px;
     z-index: 10000;
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    border: 2px solid #007bff;
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(26, 54, 93, 0.15);
+    border: 2px solid #1a365d; /* Azul marino InnovaTech */
+    min-width: 250px;
 }
 
 .accessibility-btn {
@@ -16,15 +19,23 @@
     top: 20px;
     right: 20px;
     z-index: 10001;
-    background: #007bff;
-    color: white;
+    background: linear-gradient(135deg, #1a365d 0%, #2563eb 100%);
+    color: #ffffff;
     border: none;
-    padding: 10px 15px;
+    padding: 12px 16px;
     border-radius: 50%;
     cursor: pointer;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(26, 54, 93, 0.3);
 }
+
+    .accessibility-btn:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    }
 
 .accessibility-options {
     display: none;
@@ -32,38 +43,88 @@
 
     .accessibility-options.show {
         display: block;
+        animation: fadeInSlide 0.3s ease;
     }
 
-.option-group {
-    margin-bottom: 15px;
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
+.option-group {
+    margin-bottom: 18px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+    .option-group:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
     .option-group h4 {
-        margin-bottom: 8px;
-        color: #333;
-        font-size: 14px !important;
+        margin-bottom: 10px;
+        color: #1a365d; /* Azul marino */
+        font-size: 15px !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
 .btn-group {
     display: flex;
-    gap: 5px;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
 .font-size-btn, .contrast-btn {
-    padding: 5px 10px;
-    border: 1px solid #ddd;
-    background: #f8f9fa;
+    padding: 8px 14px;
+    border: 2px solid #cbd5e1;
+    background: #f8fafc;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 12px;
+    font-weight: 600;
+    color: #1a365d;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
-    .font-size-btn.active, .contrast-btn.active {
-        background: #007bff;
-        color: white;
-        border-color: #0056b3;
+    .font-size-btn:hover, .contrast-btn:hover {
+        border-color: #dc2626;
+        background: #fef2f2;
+        color: #dc2626;
+        transform: translateY(-1px);
     }
+
+    .font-size-btn.active, .contrast-btn.active {
+        background: linear-gradient(135deg, #1a365d 0%, #2563eb 100%);
+        color: #ffffff;
+        border-color: #1a365d;
+        box-shadow: 0 2px 8px rgba(26, 54, 93, 0.3);
+    }
+
+/* Panel header */
+.accessibility-panel::before {
+    content: '♿ ACCESIBILIDAD';
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    color: #dc2626;
+    text-align: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #dc2626;
+    letter-spacing: 1px;
+}
 
 /* ESTILOS DE TEXTO - MÁS ESPECÍFICOS */
 body[style*="font-size"] *,
@@ -135,16 +196,16 @@ body[style*="font-size"] {
         font-size: 12px !important; /* Mantener tamaño fijo para botones de control */
     }
 
-/* Estilos de alto contraste - MÁS AGRESIVOS */
+/* Estilos de alto contraste - Tema InnovaTech */
 body.high-contrast {
-    background: #000000 !important;
+    background: #0f172a !important; /* Azul marino más oscuro */
     color: #ffffff !important;
 }
 
     body.high-contrast *:not(.accessibility-panel):not(.font-size-btn):not(.contrast-btn):not(.btn) {
-        background: #000000 !important;
+        background: #0f172a !important;
         color: #ffffff !important;
-        border-color: #ffffff !important;
+        border-color: #dc2626 !important; /* Bordes rojos */
     }
 
     body.high-contrast .navbar,
@@ -152,18 +213,25 @@ body.high-contrast {
     body.high-contrast .card,
     body.high-contrast .product-card,
     body.high-contrast .footer {
-        background: #000000 !important;
+        background: #1a365d !important; /* Azul marino */
+        color: #ffffff !important;
+        border: 3px solid #dc2626 !important; /* Borde rojo más grueso */
+    }
+
+    body.high-contrast a:not(.btn) {
+        color: #fbbf24 !important; /* Amarillo dorado para enlaces */
+        text-decoration: underline !important;
+    }
+
+    body.high-contrast .btn {
+        background: #dc2626 !important; /* Botones rojos */
         color: #ffffff !important;
         border: 2px solid #ffffff !important;
     }
 
-    body.high-contrast a:not(.btn) {
-        color: #ffff00 !important;
-    }
-
-    body.high-contrast .btn {
-        background: #ffffff !important;
-        color: #000000 !important;
+    body.high-contrast .product-badge {
+        background: #fbbf24 !important;
+        color: #0f172a !important;
         border: 2px solid #ffffff !important;
     }
 
@@ -181,13 +249,51 @@ body.inverted-contrast {
     /* Asegurar que el panel de accesibilidad no se vea afectado */
     body.high-contrast .accessibility-panel,
     body.inverted-contrast .accessibility-panel {
-        background: white !important;
-        color: black !important;
-        border: 2px solid #007bff !important;
+        background: #ffffff !important;
+        color: #1a365d !important;
+        border: 2px solid #1a365d !important;
+        filter: none !important;
     }
 
         body.high-contrast .accessibility-panel *,
         body.inverted-contrast .accessibility-panel * {
-            background: white !important;
-            color: black !important;
+            background: transparent !important;
+            color: inherit !important;
+            filter: none !important;
         }
+
+        body.high-contrast .accessibility-panel::before,
+        body.inverted-contrast .accessibility-panel::before {
+            color: #dc2626 !important;
+            border-color: #dc2626 !important;
+        }
+
+/* Indicadores de estado mejorados */
+.accessibility-panel .status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 8px;
+    background: #059669;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px #059669;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .accessibility-panel {
+        right: 10px;
+        left: 10px;
+        top: 80px;
+        width: auto;
+        min-width: auto;
+    }
+
+    .accessibility-btn {
+        right: 15px;
+        top: 15px;
+        padding: 10px 14px;
+        font-size: 16px;
+    }
+}

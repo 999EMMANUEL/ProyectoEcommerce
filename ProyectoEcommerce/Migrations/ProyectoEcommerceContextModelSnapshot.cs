@@ -54,6 +54,27 @@ namespace ProyectoEcommerce.Migrations
 
                     b.ToTable("Product");
                 });
+
+            modelBuilder.Entity("ProyectoEcommerce.Models.Testimonial", b =>
+                {
+                    b.Property<int>("TestimonialId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestimonialId"));
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TestimonialId");
+
+                    b.ToTable("Testimonial");
+                });
 #pragma warning restore 612, 618
         }
     }

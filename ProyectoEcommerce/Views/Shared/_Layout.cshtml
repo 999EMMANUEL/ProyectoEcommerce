@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="nav-links">
-                    <a href="#" class="nav-link">Sobre Nosotros</a>
+                    <a class="nav-link" asp-area="" asp-controller="AboutUs" asp-action="Index">Sobre Nosotros</a>
                     <a href="#" class="nav-link">Preguntas Frecuentes</a>
                     <a href="#" class="nav-link">Promociones</a>
                     <a href="#" class="nav-link">Destacados</a>
@@ -68,8 +68,16 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - ProyectoEcommerce - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="footer-content">
+                <p>
+                    &copy; 2025 - ProyectoEcommerce -
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Politicas y privacidad</a> |
+                    <a asp-area="" asp-controller="Home" asp-action="LegalInformation">Informacion legal</a>
+                    <a asp-area="" asp-controller="Home" asp-action="SocialMedia">Redes sociales</a>
+                </p>
+            </div>
         </div>
+
         <!-- Botón flotante de accesibilidad -->
         <button class="accessibility-btn" onclick="toggleAccessibilityPanel()">
            accsesibilidad

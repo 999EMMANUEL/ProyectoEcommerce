@@ -15,5 +15,9 @@ namespace ProyectoEcommerce.Data
         }
 
         public DbSet<Product> Product { get; set; }
+
+        public DbSet<Testimonial> Testimonial { get; set; }
+
+
     }
 }

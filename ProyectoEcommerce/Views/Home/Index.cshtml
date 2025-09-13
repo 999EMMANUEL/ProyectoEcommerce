@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
 <main class="main-content">
     <h1 class="section-title">Productos Destacados</h1>
 
@@ -63,11 +66,13 @@
             </div>
         }
     </div>
+
 </main>
 
-<a href="#" class="whatsapp-btn" title="Contactar por WhatsApp">W</a>
+<img src="~/images/Logos/Whats.png" class="whatsapp-btn" title="Contactar por WhatsApp"></img>
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
-}
+<li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Productos</a>
+</li>
 
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d583.836237941427!2d-85.44659042062092!3d10.134533464034956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f9fb0ad9493f9cf%3A0x12f243e7463b8ae2!2sUniversidad%20Nacional%2C%20150%2C%20Provincia%20de%20Guanacaste%2C%20Nicoya!5e0!3m2!1ses-419!2scr!4v1757747295459!5m2!1ses-419!2scr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>

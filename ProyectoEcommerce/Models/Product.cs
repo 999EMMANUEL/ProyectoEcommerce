@@ -19,6 +19,8 @@ namespace ProyectoEcommerce.Models
 
         public string ImageUrl { get; set; }
 
+        public int Stock { get; set; }
+
 
     }
 }

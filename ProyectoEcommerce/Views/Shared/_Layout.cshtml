@@ -80,12 +80,13 @@
 
         <!-- Botón flotante de accesibilidad -->
         <button class="accessibility-btn" onclick="toggleAccessibilityPanel()">
-           accsesibilidad
+            accesibilidad
         </button>
 
         <!-- Panel de opciones -->
         <div class="accessibility-panel" id="accessibilityPanel">
             <div class="accessibility-options" id="accessibilityOptions">
+                <!-- opciones aquí -->       
                 <div class="option-group">
                     <h4>Tamaño de texto</h4>
                     <div class="btn-group">
@@ -118,7 +119,9 @@
                 const panel = document.getElementById('accessibilityOptions');
                 panel.classList.toggle('show');
             }
+
         </script>
+
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

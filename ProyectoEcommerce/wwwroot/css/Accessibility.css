@@ -1,0 +1,193 @@
+﻿/* Controles de accesibilidad */
+.accessibility-panel {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 10000;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    border: 2px solid #007bff;
+}
+
+.accessibility-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10001;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.accessibility-options {
+    display: none;
+}
+
+    .accessibility-options.show {
+        display: block;
+    }
+
+.option-group {
+    margin-bottom: 15px;
+}
+
+    .option-group h4 {
+        margin-bottom: 8px;
+        color: #333;
+        font-size: 14px !important;
+    }
+
+.btn-group {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.font-size-btn, .contrast-btn {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+    .font-size-btn.active, .contrast-btn.active {
+        background: #007bff;
+        color: white;
+        border-color: #0056b3;
+    }
+
+/* ESTILOS DE TEXTO - MÁS ESPECÍFICOS */
+body[style*="font-size"] *,
+body.high-contrast *,
+body.inverted-contrast * {
+    transition: all 0.3s ease;
+}
+
+/* Asegurar que todos los textos hereden el tamaño de fuente */
+body[style*="font-size"] {
+    font-size: var(--current-font-size, 16px) !important;
+}
+
+    body[style*="font-size"] *:not(button):not(input):not(textarea):not(select) {
+        font-size: inherit !important;
+    }
+
+    /* Específicos para elementos comunes de ecommerce */
+    body[style*="font-size"] .card-title,
+    body[style*="font-size"] .product-name,
+    body[style*="font-size"] .product-title,
+    body[style*="font-size"] .item-name,
+    body[style*="font-size"] h1,
+    body[style*="font-size"] h2,
+    body[style*="font-size"] h3,
+    body[style*="font-size"] h4,
+    body[style*="font-size"] h5,
+    body[style*="font-size"] h6,
+    body[style*="font-size"] p,
+    body[style*="font-size"] span,
+    body[style*="font-size"] div:not(.btn-group):not(.accessibility-panel),
+    body[style*="font-size"] a:not(.btn),
+    body[style*="font-size"] li {
+        font-size: inherit !important;
+    }
+
+    /* Header específico */
+    body[style*="font-size"] .navbar-brand,
+    body[style*="font-size"] .nav-link,
+    body[style*="font-size"] .navbar-text {
+        font-size: inherit !important;
+    }
+
+    /* Productos */
+    body[style*="font-size"] .card,
+    body[style*="font-size"] .product-card,
+    body[style*="font-size"] .item-card {
+        font-size: inherit !important;
+    }
+
+    body[style*="font-size"] .card-body *,
+    body[style*="font-size"] .product-info *,
+    body[style*="font-size"] .item-info * {
+        font-size: inherit !important;
+    }
+
+    /* Precios */
+    body[style*="font-size"] .price,
+    body[style*="font-size"] .product-price,
+    body[style*="font-size"] .item-price {
+        font-size: inherit !important;
+    }
+
+    /* Botones (excluirlos del tamaño de fuente general) */
+    body[style*="font-size"] .btn,
+    body[style*="font-size"] button,
+    body[style*="font-size"] .font-size-btn,
+    body[style*="font-size"] .contrast-btn {
+        font-size: 12px !important; /* Mantener tamaño fijo para botones de control */
+    }
+
+/* Estilos de alto contraste - MÁS AGRESIVOS */
+body.high-contrast {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+    body.high-contrast *:not(.accessibility-panel):not(.font-size-btn):not(.contrast-btn):not(.btn) {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border-color: #ffffff !important;
+    }
+
+    body.high-contrast .navbar,
+    body.high-contrast .header,
+    body.high-contrast .card,
+    body.high-contrast .product-card,
+    body.high-contrast .footer {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #ffffff !important;
+    }
+
+    body.high-contrast a:not(.btn) {
+        color: #ffff00 !important;
+    }
+
+    body.high-contrast .btn {
+        background: #ffffff !important;
+        color: #000000 !important;
+        border: 2px solid #ffffff !important;
+    }
+
+/* Estilos de contraste invertido */
+body.inverted-contrast {
+    filter: invert(1) hue-rotate(180deg) !important;
+}
+
+    body.inverted-contrast img,
+    body.inverted-contrast video,
+    body.inverted-contrast iframe {
+        filter: invert(1) hue-rotate(180deg) !important;
+    }
+
+    /* Asegurar que el panel de accesibilidad no se vea afectado */
+    body.high-contrast .accessibility-panel,
+    body.inverted-contrast .accessibility-panel {
+        background: white !important;
+        color: black !important;
+        border: 2px solid #007bff !important;
+    }
+
+        body.high-contrast .accessibility-panel *,
+        body.inverted-contrast .accessibility-panel * {
+            background: white !important;
+            color: black !important;
+        }

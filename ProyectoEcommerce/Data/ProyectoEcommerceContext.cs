@@ -17,3 +17,5 @@ namespace ProyectoEcommerce.Data
         public DbSet<ProyectoEcommerce.Models.Product> Product { get; set; } = default!;
     }
 }
+
+

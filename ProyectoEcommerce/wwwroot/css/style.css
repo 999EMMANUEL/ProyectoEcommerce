@@ -314,3 +314,23 @@
         .whatsapp-btn:hover {
             background: #20c056;
         }
+
+
+
+
+/* === Imagen del producto  */
+.product-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3; 
+    overflow: hidden;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* llena recortando sin deformar */
+        display: block;
+    }

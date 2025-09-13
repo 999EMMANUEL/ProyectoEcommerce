@@ -1,168 +1,154 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nombre - Tienda Electrónica</title>
-    <link rel="stylesheet" href="~/css/Style.CSS">
-</head>
-<body>
 
-    <main class="main-content">
-        <h1 class="section-title">Productos Destacados</h1>
+<main class="main-content">
+    <h1 class="section-title">Productos Destacados</h1>
 
-        <div class="products-grid">
-            <div class="product-card">
-                <div class="product-image">
-                    [Imagen del Producto]
-                    <div class="product-badge available">Disponible</div>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Producto</h3>
-                    <p class="product-category">Smartphones</p>
-                    <p class="product-availability">
-                        <span class="status-indicator"></span>
-                        En stock (15 unidades)
-                    </p>
-                    <div class="product-price">
-                        ₡9,999.99
-                        <span class="old-price">₡9,999.99</span>
-                    </div>
-                </div>
+    <div class="products-grid">
+        <!-- 1 -->
+        <div class="product-card">
+            <div class="product-image">
+                <img src='@Url.Content("~/images/products/iphone.jpg")' alt="iPhone" asp-append-version="true" />
+                <div class="product-badge available">Disponible</div>
             </div>
-
-            <div class="product-card">
-                <div class="product-image">
-                    [Imagen del Producto]
-                    <div class="product-badge available">Disponible</div>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Producto</h3>
-                    <p class="product-category">Laptops</p>
-                    <p class="product-availability">
-                        <span class="status-indicator"></span>
-                        En stock (8 unidades)
-                    </p>
-                    <div class="product-price">
-                        ₡9,999.99
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-image">
-                    [Imagen del Producto]
-                    <div class="product-badge">Agotado</div>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Producto</h3>
-                    <p class="product-category">Audio</p>
-                    <p class="product-availability">
-                        <span class="status-indicator unavailable"></span>
-                        Sin stock
-                    </p>
-                    <div class="product-price">
-                        ₡9,999.99
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-image">
-                    [Imagen del Producto]
-                    <div class="product-badge available">Disponible</div>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Producto</h3>
-                    <p class="product-category">Smartphones</p>
-                    <p class="product-availability">
-                        <span class="status-indicator"></span>
-                        En stock (12 unidades)
-                    </p>
-                    <div class="product-price">
-                        ₡9,999.99
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-image">
-                    [Imagen del Producto]
-                    <div class="product-badge available">Disponible</div>
-                </div>
-                <div class="product-info">
-                    <h3 name="product-name">Producto</h3>
-                    <p class="product-category">Gaming</p>
-                    <p class="product-availability">
-                        <span class="status-indicator"></span>
-                        En stock (5 unidades)
-                    </p>
-                    <div class="product-price">
-                        ₡9,999.99
-                        <span class="old-price">₡9,999.99</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-image">
-                    [Imagen del Producto]
-                    <div class="product-badge available">Disponible</div>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Producto</h3>
-                    <p class="product-category">Laptops</p>
-                    <p class="product-availability">
-                        <span class="status-indicator"></span>
-                        En stock (3 unidades)
-                    </p>
-                    <div class="product-price">
-                        ₡9,999.99
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-image">
-                    [Imagen del Producto]
-                    <div class="product-badge available">Disponible</div>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Producto</h3>
-                    <p class="product-category">Wearables</p>
-                    <p class="product-availability">
-                        <span class="status-indicator"></span>
-                        En stock (20 unidades)
-                    </p>
-                    <div class="product-price">
-                        ₡9,999.99
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-image">
-                    [Imagen del Producto]
-                    <div class="product-badge available">Disponible</div>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name">Producto</h3>
-                    <p class="product-category">Gaming</p>
-                    <p class="product-availability">
-                        <span class="status-indicator"></span>
-                        En stock (10 unidades)
-                    </p>
-                    <div class="product-price">
-                        ₡9,999.99
-                    </div>
+            <div class="product-info">
+                <h3 class="product-name">Producto</h3>
+                <p class="product-category">Smartphones</p>
+                <p class="product-availability">
+                    <span class="status-indicator"></span>
+                    En stock (15 unidades)
+                </p>
+                <div class="product-price">
+                    ₡9,999.99
+                    <span class="old-price">₡9,999.99</span>
                 </div>
             </div>
         </div>
-    </main>
 
-    <a href="#" class="whatsapp-btn" title="Contactar por WhatsApp">W</a>
-</body>
-</html>
+        <!-- 2 -->
+        <div class="product-card">
+            <div class="product-image">
+                <img src='@Url.Content("~/images/products/laptop.jpg")' alt="Laptop" asp-append-version="true" />
+                <div class="product-badge available">Disponible</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Producto</h3>
+                <p class="product-category">Laptops</p>
+                <p class="product-availability">
+                    <span class="status-indicator"></span>
+                    En stock (8 unidades)
+                </p>
+                <div class="product-price">₡9,999.99</div>
+            </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="product-card">
+            <div class="product-image">
+                <img src='@Url.Content("~/images/products/audifonos.jpg")' alt="Audífonos" asp-append-version="true" />
+                <div class="product-badge">Agotado</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Producto</h3>
+                <p class="product-category">Audio</p>
+                <p class="product-availability">
+                    <span class="status-indicator unavailable"></span>
+                    Sin stock
+                </p>
+                <div class="product-price">₡9,999.99</div>
+            </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="product-card">
+            <div class="product-image">
+                <img src='@Url.Content("~/images/products/redmi.jpg")' alt="Redmi" asp-append-version="true" />
+                <div class="product-badge available">Disponible</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Producto</h3>
+                <p class="product-category">Smartphones</p>
+                <p class="product-availability">
+                    <span class="status-indicator"></span>
+                    En stock (12 unidades)
+                </p>
+                <div class="product-price">₡9,999.99</div>
+            </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="product-card">
+            <div class="product-image">
+               
+                <img src='@Url.Content("~/images/products/ps.jpg")' alt="Play Station" asp-append-version="true" />
+                <div class="product-badge available">Disponible</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Producto</h3>
+                <p class="product-category">Gaming</p>
+                <p class="product-availability">
+                    <span class="status-indicator"></span>
+                    En stock (5 unidades)
+                </p>
+                <div class="product-price">
+                    ₡9,999.99
+                    <span class="old-price">₡9,999.99</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="product-card">
+            <div class="product-image">
+                <img src='@Url.Content("~/images/products/camara.jpg")' alt="Cámara" asp-append-version="true" />
+                <div class="product-badge available">Disponible</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Producto</h3>
+                <p class="product-category">Fotografía</p>
+                <p class="product-availability">
+                    <span class="status-indicator"></span>
+                    En stock (3 unidades)
+                </p>
+                <div class="product-price">₡9,999.99</div>
+            </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="product-card">
+            <div class="product-image">
+                <img src='@Url.Content("~/images/products/reloj.jpg")' alt="Reloj" asp-append-version="true" />
+                <div class="product-badge available">Disponible</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Producto</h3>
+                <p class="product-category">Wearables</p>
+                <p class="product-availability">
+                    <span class="status-indicator"></span>
+                    En stock (20 unidades)
+                </p>
+                <div class="product-price">₡9,999.99</div>
+            </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="product-card">
+            <div class="product-image">
+                <img src='@Url.Content("~/images/products/teclado.jpg")' alt="Teclado" asp-append-version="true" />
+                <div class="product-badge available">Disponible</div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">Producto</h3>
+                <p class="product-category">Gaming</p>
+                <p class="product-availability">
+                    <span class="status-indicator"></span>
+                    En stock (10 unidades)
+                </p>
+                <div class="product-price">₡9,999.99</div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<a href="#" class="whatsapp-btn" title="Contactar por WhatsApp">W</a>

@@ -1,4 +1,4 @@
-﻿class FormValidator {
+﻿class InnovaTechFormValidator {
     constructor(formId) {
         this.form = document.getElementById(formId);
         this.initializeValidation();
@@ -15,6 +15,9 @@
             e.preventDefault();
             this.handleSubmit();
         });
+
+        // Formatear teléfono mientras se escribe
+        document.getElementById('telefono').addEventListener('input', this.formatPhone);
     }
 
     validateField(field) {
@@ -60,7 +63,6 @@
     }
 
     validateTelefono(telefono) {
-        // Remover caracteres no numéricos para validar
         const telefonoLimpio = telefono.replace(/\D/g, '');
         return telefonoLimpio.length >= 8 && telefonoLimpio.length <= 15;
     }
@@ -106,9 +108,9 @@
             return;
         }
 
-        // Simular envío
+        // Simular envío con el estilo de InnovaTech
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<div class="loading"></div>Enviando...';
+        submitBtn.innerHTML = '<div class="contact-form-loading"></div>Enviando...';
 
         try {
             // Simular delay de envío
@@ -124,6 +126,9 @@
                 field.classList.remove('success', 'error');
             });
 
+            // Scroll suave hacia el mensaje de éxito
+            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
             setTimeout(() => {
                 successMessage.style.display = 'none';
             }, 5000);
@@ -135,28 +140,27 @@
             submitBtn.innerHTML = 'Enviar consulta';
         }
     }
+
+    formatPhone(e) {
+        let value = e.target.value.replace(/\D/g, '');
+
+        // Formato para Costa Rica: +506 8888-8888
+        if (value.length > 0) {
+            if (value.length <= 8) {
+                value = value.replace(/(\d{4})(\d{0,4})/, '$1-$2');
+            }
+            if (value.startsWith('506')) {
+                value = '+' + value.replace(/(\d{3})(\d{4})(\d{0,4})/, '$1 $2-$3');
+            } else if (value.length === 8) {
+                value = '+506 ' + value.replace(/(\d{4})(\d{4})/, '$1-$2');
+            }
+        }
+
+        e.target.value = value;
+    }
 }
 
 // Inicializar validador cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    new FormValidator('contactForm');
-});
-
-// Formatear teléfono mientras se escribe
-document.getElementById('telefono').addEventListener('input', function (e) {
-    let value = e.target.value.replace(/\D/g, '');
-
-    // Formato para Costa Rica: +506 8888-8888
-    if (value.length > 0) {
-        if (value.length <= 8) {
-            value = value.replace(/(\d{4})(\d{0,4})/, '$1-$2');
-        }
-        if (value.startsWith('506')) {
-            value = '+' + value.replace(/(\d{3})(\d{4})(\d{0,4})/, '$1 $2-$3');
-        } else if (value.length === 8) {
-            value = '+506 ' + value.replace(/(\d{4})(\d{4})/, '$1-$2');
-        }
-    }
-
-    e.target.value = value;
+    new InnovaTechFormValidator('contactForm');
 });

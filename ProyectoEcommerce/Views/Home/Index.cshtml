@@ -12,14 +12,14 @@
         @foreach (var item in Model)
         {
             <div class="product-card">
-                <!-- Enlace a Products/Details/{id} usando Anchor Tag Helper -->
+                <!-- Enlace que cubre solo la imagen y la info básica -->
                 <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id" class="product-link">
                     <div class="product-image">
                         @{
                             // Decide la URL de la imagen: externa o local
                             string imgSrc = string.Empty;
                             if (!string.IsNullOrEmpty(item.ImageUrl) &&
-                                (item.ImageUrl.StartsWith("http://") || item.ImageUrl.StartsWith("https://")))
+                            (item.ImageUrl.StartsWith("http://") || item.ImageUrl.StartsWith("https://")))
                             {
                                 imgSrc = item.ImageUrl; // URL externa
                             }
@@ -27,8 +27,8 @@
                             {
                                 // Normaliza rutas locales: acepta "images/..." "/images/..." o "~/images/..."
                                 var localPath = item.ImageUrl.StartsWith("~")
-                                    ? item.ImageUrl
-                                    : (item.ImageUrl.StartsWith("/") ? "~" + item.ImageUrl : "~/" + item.ImageUrl.TrimStart('/'));
+                                ? item.ImageUrl
+                                : (item.ImageUrl.StartsWith("/") ? "~" + item.ImageUrl : "~/" + item.ImageUrl.TrimStart('/'));
                                 imgSrc = Url.Content(localPath);
                             }
                             else
@@ -52,7 +52,7 @@
                         </div>
                     </div>
 
-                    <div class="product-info">
+                    <div class="product-info-clickable">
                         <h3 class="product-name">@item.Name</h3>
                         @* Si tienes categoría como propiedad, muéstrala. Si no, omítelo. *@
                         @* <p class="product-category">@item.Category</p> *@
@@ -63,6 +63,25 @@
                         <div class="product-price">@item.Price.ToString("C")</div>
                     </div>
                 </a>
+
+               
+                <div class="product-actions">
+                    @if (item.Available && item.Stock > 0)
+                    {
+                        <button type="button"
+                                class="buy-btn"
+                                onclick="addToCart(@item.Id, '@item.Name', @item.Price)"
+                                data-product-id="@item.Id">
+                            Comprar Ahora
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="buy-btn disabled" disabled>
+                            Agotado
+                        </button>
+                    }
+                </div>
             </div>
         }
     </div>
@@ -75,4 +94,122 @@
     <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Productos</a>
 </li>
 
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d583.836237941427!2d-85.44659042062092!3d10.134533464034956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f9fb0ad9493f9cf%3A0x12f243e7463b8ae2!2sUniversidad%20Nacional%2C%20150%2C%20Provincia%20de%20Guanacaste%2C%20Nicoya!5e0!3m2!1ses-419!2scr!4v1757747295459!5m2!1ses-419!2scr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<!-- Reseñas de usuarios ( guía visual — sin lógica ) -->
+<section id="user-reviews" class="user-reviews-section container">
+    <h2 class="reviews-title">Reseñas de clientes</h2>
+
+    <div class="reviews-grid">
+        <!-- Reseña 1 -->
+        <article class="review-card" tabindex="0" aria-labelledby="r1-name" aria-describedby="r1-text">
+            <header class="review-header">
+                <div class="review-avatar" aria-hidden="true">AJ</div>
+                <div class="review-meta">
+                    <strong id="r1-name" class="review-name">Ana Jiménez</strong>
+                    <div class="review-payment">Método: <span class="payment-method">Tarjeta de crédito</span></div>
+                </div>
+            </header>
+            <div class="review-body" id="r1-text">
+                <p>El producto llegó rápido y en perfecto estado. La atención al cliente resolvió mi duda en minutos. ¡Recomendado!</p>
+            </div>
+        </article>
+
+        <!-- Reseña 2 -->
+        <article class="review-card" tabindex="0" aria-labelledby="r2-name" aria-describedby="r2-text">
+            <header class="review-header">
+                <div class="review-avatar" aria-hidden="true">CR</div>
+                <div class="review-meta">
+                    <strong id="r2-name" class="review-name">Carlos Rodríguez</strong>
+                    <div class="review-payment">Método: <span class="payment-method">PayPal</span></div>
+                </div>
+            </header>
+            <div class="review-body" id="r2-text">
+                <p>Buena relación precio-calidad. La garantía funcionó sin problemas. Volvería a comprar.</p>
+            </div>
+        </article>
+
+        <!-- Reseña 3 -->
+        <article class="review-card" tabindex="0" aria-labelledby="r3-name" aria-describedby="r3-text">
+            <header class="review-header">
+                <div class="review-avatar" aria-hidden="true">ML</div>
+                <div class="review-meta">
+                    <strong id="r3-name" class="review-name">María López</strong>
+                    <div class="review-payment">Método: <span class="payment-method">Efectivo / Contra entrega</span></div>
+                </div>
+            </header>
+            <div class="review-body" id="r3-text">
+                <p>Muy contenta con la compra. El empaque estaba muy bien y las instrucciones claras.</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- Mapa + Sucursales (lado a lado) -->
+<section class="map-branches container" aria-label="Mapa y sucursales">
+    <div class="map-branches-grid">
+        <!-- Columna: Mapa -->
+        <div class="map-column">
+            <h2 class="map-title">Encuéntranos</h2>
+            <div class="map-wrapper" role="application" aria-label="Mapa de sucursales">
+                <!-- Tu iframe (ya existente) -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d583.836237941427!2d-85.44659042062092!3d10.134533464034956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f9fb0ad9493f9cf%3A0x12f243e7463b8ae2!2sUniversidad%20Nacional%2C%20150%2C%20Provincia%20de%20Guanacaste%2C%20Nicoya!5e0!3m2!1ses-419!2scr!4v1757747295459!5m2!1ses-419!2scr"
+                        class="responsive-iframe"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Mapa de sucursales">
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Columna: Lista de sucursales -->
+        <aside class="branches-column" aria-labelledby="branches-title">
+            <h2 id="branches-title" class="branches-title">Sucursales disponibles</h2>
+
+            <!-- Lista de sucursales estática (guía visual) -->
+            <div class="branches-list">
+                <!-- Sucursal 1 -->
+                <article class="branch-card" tabindex="0" aria-labelledby="branch1-name">
+                    <div class="branch-header">
+                        <strong id="branch1-name" class="branch-name">Sucursal Central - Nicoya</strong>
+                        <span class="branch-distance">A 2.1 km</span>
+                    </div>
+                    <div class="branch-body">
+                        <div class="branch-address">Av. Principal 123, Nicoya, Guanacaste</div>
+                        <div class="branch-hours">Horario: Lun - Vie 8:00 - 17:00</div>
+                        <div class="branch-phone">Tel: <a href="tel:+50612345678">+506 1234-5678</a></div>
+                        <div class="branch-payment">Métodos: Tarjeta • Efectivo • PayPal</div>
+                    </div>
+                </article>
+
+                <!-- Sucursal 2 -->
+                <article class="branch-card" tabindex="0" aria-labelledby="branch2-name">
+                    <div class="branch-header">
+                        <strong id="branch2-name" class="branch-name">Sucursal Plaza Oeste</strong>
+                        <span class="branch-distance">A 12.5 km</span>
+                    </div>
+                    <div class="branch-body">
+                        <div class="branch-address">Centro Comercial Plaza Oeste, Local 5</div>
+                        <div class="branch-hours">Horario: Lun - Sab 9:00 - 18:00</div>
+                        <div class="branch-phone">Tel: <a href="tel:+50687654321">+506 8765-4321</a></div>
+                        <div class="branch-payment">Métodos: Tarjeta • PayPal</div>
+                    </div>
+                </article>
+
+                <!-- Sucursal 3 -->
+                <article class="branch-card" tabindex="0" aria-labelledby="branch3-name">
+                    <div class="branch-header">
+                        <strong id="branch3-name" class="branch-name">Punto Express - Playa</strong>
+                        <span class="branch-distance">A 35 km</span>
+                    </div>
+                    <div class="branch-body">
+                        <div class="branch-address">Ruta 21, Km 4, Local frente a la playa</div>
+                        <div class="branch-hours">Horario: Mar - Dom 10:00 - 20:00</div>
+                        <div class="branch-phone">Tel: <a href="tel:+50644556677">+506 4455-6677</a></div>
+                        <div class="branch-payment">Métodos: Efectivo • Contra entrega</div>
+                    </div>
+                </article>
+            </div>
+        </aside>
+    </div>
+</section>

@@ -132,5 +132,19 @@ window.toggleAccessibilityPanel = function () {
     }
 }
 
+/*document.addEventListener('click', function (e) {
+    const panel = document.getElementById('accessibilityOptions');
+    const btn = document.querySelector('.accessibility-btn');
+
+    if (!panel.contains(e.target) && e.target !== btn) {
+        panel.classList.remove('show');
+    }
+});*/
+
+function toggleAccessibilityPanel() {
+    const panel = document.getElementById('accessibilityOptions');
+    panel.classList.toggle('show');
+}
+
 // Iniciar
 initAccessibility();

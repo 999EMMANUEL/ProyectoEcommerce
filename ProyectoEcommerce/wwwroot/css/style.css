@@ -1,0 +1,171 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Main Content / Grid de productos */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.section-title {
+    font-size: 28px;
+    font-weight: normal;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #495057;
+}
+
+/* Grid de tarjetas */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    /* auto-fill o auto-fit, eliges; minmax define mínimo ancho de tarjeta */
+    gap: 20px;
+}
+
+/* Cada tarjeta */
+.product-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* para que imagen + info estén uno debajo de otro */
+    max-width: 300px; /* opcional: evitar que tarjetas crezcan demasiado en pantallas grandes */
+    margin: 0 auto;
+    transition: transform 0.2s;
+}
+
+    .product-card:hover {
+        transform: scale(1.02);
+    }
+
+/* Imagen */
+.product-image {
+    width: 500px;
+    height: 500px; /* fija la altura que quieras */
+    /* puedes cambiar 200px por otro valor; lo importante es que todas igual */
+    background-color: #f7f7f7;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+    .product-image img.card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* recorta pero llena todo el contenedor */
+        object-position: center center;
+        display: block;
+    }
+
+/* Carrusel de productos: tamaño controlado */
+.featured-carousel {
+    max-width: 900px; /* ancho máximo del carrusel (ajusta) */
+    margin: 0 auto 30px;
+}
+
+    .featured-carousel .carousel-product-img {
+        height: 220px; /* altura fija para todas las imágenes dentro del carrusel */
+        width: auto; /* mantiene proporción */
+        object-fit: contain; /* muestra la imagen completa centrada sin recortar */
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 10px; /* pequeño padding para que no toque los bordes */
+    }
+
+/* Si prefieres recortar y llenar completamente: usar object-fit: cover; */
+/* .featured-carousel .carousel-product-img { object-fit: cover; } */
+
+/* Ajustes responsivos: en pantallas pequeñas reduce altura */
+@media (max-width: 576px) {
+    .featured-carousel .carousel-product-img {
+        height: 140px;
+    }
+}
+
+
+/* Badges sobre la imagen */
+.product-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #dc3545;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: normal;
+}
+
+    .product-badge.available {
+        background: #28a745;
+    }
+
+/* Información del producto (nombre, precio, disponibilidad) */
+.product-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* para que el contenido textual ocupe el espacio disponible debajo de la imagen */
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 8px;
+}
+
+.product-category {
+    color: #6c757d;
+    font-size: 12px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product-availability {
+    font-size: 13px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #6c757d;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #28a745;
+}
+
+    .status-indicator.unavailable {
+        background: #dc3545;
+    }
+
+.product-price {
+    font-size: 18px;
+    font-weight: 600;
+    color: #212529;
+    margin-top: auto; /* empuja al fondo de la tarjeta si hay espacio extra */
+}
+
+/* Otros estilos existentes, ajusta según lo necesites */

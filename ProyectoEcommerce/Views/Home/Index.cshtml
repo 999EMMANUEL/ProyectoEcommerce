@@ -1,8 +1,211 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nombre - Tienda Electrónica</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <a href="#" class="logo">[LOGO]</a>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Buscar productos...">
+                <button class="search-btn">Buscar</button>
+            </div>
+
+            <div class="header-actions">
+                <a href="#" class="header-btn">Mi Cuenta</a>
+                <a href="#" class="header-btn">Favoritos</a>
+                <a href="#" class="header-btn">Carrito <span class="cart-badge">3</span></a>
+            </div>
+        </div>
+
+        <nav class="navigation">
+            <div class="nav-container">
+                <div class="categories-dropdown">
+                    <button class="categories-btn">
+                        Categorías
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#">Computadoras</a>
+                        <a href="#">Smartphones</a>
+                        <a href="#">Audio</a>
+                        <a href="#">TV & Video</a>
+                        <a href="#">Gaming</a>
+                        <a href="#">Laptops</a>
+                        <a href="#">Wearables</a>
+                        <a href="#">Accesorios</a>
+                    </div>
+                </div>
+
+                <div class="nav-links">
+                    <a href="#" class="nav-link">Sobre Nosotros</a>
+                    <a href="#" class="nav-link">Preguntas Frecuentes</a>
+                    <a href="#" class="nav-link">Promociones</a>
+                    <a href="#" class="nav-link">Destacados</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1 class="section-title">Productos Destacados</h1>
+
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    [Imagen del Producto]
+                    <div class="product-badge available">Disponible</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Producto</h3>
+                    <p class="product-category">Smartphones</p>
+                    <p class="product-availability">
+                        <span class="status-indicator"></span>
+                        En stock (15 unidades)
+                    </p>
+                    <div class="product-price">
+                        ₡9,999.99
+                        <span class="old-price">₡9,999.99</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    [Imagen del Producto]
+                    <div class="product-badge available">Disponible</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Producto</h3>
+                    <p class="product-category">Laptops</p>
+                    <p class="product-availability">
+                        <span class="status-indicator"></span>
+                        En stock (8 unidades)
+                    </p>
+                    <div class="product-price">
+                        ₡9,999.99
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    [Imagen del Producto]
+                    <div class="product-badge">Agotado</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Producto</h3>
+                    <p class="product-category">Audio</p>
+                    <p class="product-availability">
+                        <span class="status-indicator unavailable"></span>
+                        Sin stock
+                    </p>
+                    <div class="product-price">
+                        ₡9,999.99
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    [Imagen del Producto]
+                    <div class="product-badge available">Disponible</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Producto</h3>
+                    <p class="product-category">Smartphones</p>
+                    <p class="product-availability">
+                        <span class="status-indicator"></span>
+                        En stock (12 unidades)
+                    </p>
+                    <div class="product-price">
+                        ₡9,999.99
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    [Imagen del Producto]
+                    <div class="product-badge available">Disponible</div>
+                </div>
+                <div class="product-info">
+                    <h3 name="product-name">Producto</h3>
+                    <p class="product-category">Gaming</p>
+                    <p class="product-availability">
+                        <span class="status-indicator"></span>
+                        En stock (5 unidades)
+                    </p>
+                    <div class="product-price">
+                        ₡9,999.99
+                        <span class="old-price">₡9,999.99</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    [Imagen del Producto]
+                    <div class="product-badge available">Disponible</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Producto</h3>
+                    <p class="product-category">Laptops</p>
+                    <p class="product-availability">
+                        <span class="status-indicator"></span>
+                        En stock (3 unidades)
+                    </p>
+                    <div class="product-price">
+                        ₡9,999.99
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    [Imagen del Producto]
+                    <div class="product-badge available">Disponible</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Producto</h3>
+                    <p class="product-category">Wearables</p>
+                    <p class="product-availability">
+                        <span class="status-indicator"></span>
+                        En stock (20 unidades)
+                    </p>
+                    <div class="product-price">
+                        ₡9,999.99
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    [Imagen del Producto]
+                    <div class="product-badge available">Disponible</div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Producto</h3>
+                    <p class="product-category">Gaming</p>
+                    <p class="product-availability">
+                        <span class="status-indicator"></span>
+                        En stock (10 unidades)
+                    </p>
+                    <div class="product-price">
+                        ₡9,999.99
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <a href="#" class="whatsapp-btn" title="Contactar por WhatsApp">W</a>
+</body>
+</html>

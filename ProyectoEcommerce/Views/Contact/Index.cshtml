@@ -1,0 +1,64 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/ContactForm.css" asp-append-version="true" />
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+    <div class="form-container">
+        <h2 class="form-title">Contáctanos</h2>
+
+        <form id="contactForm" novalidate>
+            <div class="form-group">
+                <label for="nombre" class="form-label">Nombre completo *</label>
+                <input type="text" id="nombre" name="nombre" class="form-input" placeholder="Ingresa tu nombre completo">
+                <div class="error-message" id="nombreError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Correo electrónico *</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="ejemplo@correo.com">
+                <div class="error-message" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono" class="form-label">Teléfono *</label>
+                <input type="tel" id="telefono" name="telefono" class="form-input" placeholder="Ej: +506 8888-8888">
+                <div class="error-message" id="telefonoError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="mensaje" class="form-label">Mensaje *</label>
+                <textarea id="mensaje" name="mensaje" class="form-textarea" placeholder="Escribe tu consulta o mensaje aquí..."></textarea>
+                <div class="error-message" id="mensajeError"></div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Enviar consulta
+            </button>
+        </form>
+
+        <div class="success-message" id="successMessage">
+            ¡Mensaje enviado correctamente! Te contactaremos pronto.
+        </div>
+
+        <div class="form-footer">
+            <p>Los campos marcados con * son obligatorios</p>
+        </div>
+    </div>
+
+
+</body>
+</html>

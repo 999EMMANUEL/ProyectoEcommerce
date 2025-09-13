@@ -31,6 +31,9 @@ namespace ProyectoEcommerce.Controllers
         }
 
         public IActionResult Privacy() => View();
+        public IActionResult LegalInformation() => View();
+        public IActionResult SocialMedia() => View();
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -1,70 +1,6 @@
 ﻿@model IEnumerable<ProyectoEcommerce.Models.Product>
-
-@* Carrusel de productos destacados *@
 @{
-    var featured = Model?.Take(8).ToList() ?? new List<ProyectoEcommerce.Models.Product>();
-    var carouselId = "featuredCarousel";
-}
-
-@if (featured.Any())
-{
-    <div id="@carouselId" class="carousel slide featured-carousel" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            @for (int i = 0; i < featured.Count; i++)
-            {
-                <button type="button" data-bs-target="#@carouselId" data-bs-slide-to="@i"
-                        class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")"
-                        aria-label="Slide @(i + 1)"></button>
-            }
-        </div>
-
-        <div class="carousel-inner">
-            @for (int i = 0; i < featured.Count; i++)
-            {
-                var item = featured[i];
-                string imgSrc;
-                if (!string.IsNullOrEmpty(item.ImageUrl) && (item.ImageUrl.StartsWith("http://") || item.ImageUrl.StartsWith("https://")))
-                {
-                    imgSrc = item.ImageUrl;
-                }
-                else if (!string.IsNullOrEmpty(item.ImageUrl))
-                {
-                    var localPath = item.ImageUrl.StartsWith("~") ? item.ImageUrl : ("~/" + item.ImageUrl.TrimStart('/'));
-                    imgSrc = Url.Content(localPath);
-                }
-                else
-                {
-                    imgSrc = Url.Content("~/images/products/placeholder.jpg");
-                }
-
-                <div class="carousel-item @(i == 0 ? "active" : "")">
-                    <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id" class="d-block text-center">
-                        @if (imgSrc.StartsWith("http"))
-                        {
-                            <img src="@imgSrc" alt="@item.Name" class="d-block mx-auto carousel-product-img" />
-                        }
-                        else
-                        {
-                            <img src="@imgSrc" alt="@item.Name" class="d-block mx-auto carousel-product-img" asp-append-version="true" />
-                        }
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>@item.Name</h5>
-                            <p>@(item.Available ? $"En stock ({item.Stock})" : "Agotado") — @item.Price.ToString("C")</p>
-                        </div>
-                    </a>
-                </div>
-            }
-        </div>
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#@carouselId" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#@carouselId" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Siguiente</span>
-        </button>
-    </div>
+    ViewData["Title"] = "Home Page";
 }
 
 <main class="main-content">
@@ -74,17 +10,20 @@
         @foreach (var item in Model)
         {
             <div class="product-card">
+                <!-- Enlace a Products/Details/{id} usando Anchor Tag Helper -->
                 <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id" class="product-link">
                     <div class="product-image">
                         @{
+                            // Decide la URL de la imagen: externa o local
                             string imgSrc = string.Empty;
                             if (!string.IsNullOrEmpty(item.ImageUrl) &&
                             (item.ImageUrl.StartsWith("http://") || item.ImageUrl.StartsWith("https://")))
                             {
-                                imgSrc = item.ImageUrl;
+                                imgSrc = item.ImageUrl; // URL externa
                             }
                             else if (!string.IsNullOrEmpty(item.ImageUrl))
                             {
+                                // Normaliza rutas locales: acepta "images/..." "/images/..." o "~/images/..."
                                 var localPath = item.ImageUrl.StartsWith("~")
                                 ? item.ImageUrl
                                 : (item.ImageUrl.StartsWith("/") ? "~" + item.ImageUrl : "~/" + item.ImageUrl.TrimStart('/'));
@@ -92,10 +31,11 @@
                             }
                             else
                             {
-                                imgSrc = Url.Content("~/images/products/placeholder.jpg");
+                                imgSrc = Url.Content("~/images/products/placeholder.jpg"); // placeholder
                             }
                         }
 
+                        @* Si la fuente es externa no podemos usar asp-append-version. Para local, sí. *@
                         @if (imgSrc.StartsWith("http"))
                         {
                             <img src="@imgSrc" alt="@item.Name" class="card-img" />
@@ -112,6 +52,8 @@
 
                     <div class="product-info">
                         <h3 class="product-name">@item.Name</h3>
+                        @* Si tienes categoría como propiedad, muéstrala. Si no, omítelo. *@
+                        @* <p class="product-category">@item.Category</p> *@
                         <p class="product-availability">
                             <span class="status-indicator @(item.Available ? "" : "unavailable")"></span>
                             @(item.Available ? $"En stock ({item.Stock} unidades)" : "Sin stock")

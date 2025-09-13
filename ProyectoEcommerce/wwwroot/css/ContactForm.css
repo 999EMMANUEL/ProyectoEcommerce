@@ -1,12 +1,4 @@
-﻿<!DOCTYPE html >
-<html lang="es" >
-<head >
-<meta charset="UTF-8" >
-<meta name="viewport" content="width=device-width, initial-scale=1.0" >
-<title > Formulario de Consultas - InnovaTech</title >
-<style >
-/* Solo estilos específicos del formulario - NO afectan el layout global */
-.contact-form-container {
+﻿.contact-form-container {
     max-width: 600px;
     margin: 40px auto;
     padding: 20px;

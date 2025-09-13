@@ -74,33 +74,6 @@ body {
         display: block;
     }
 
-/* Carrusel de productos: tamaño controlado */
-.featured-carousel {
-    max-width: 900px; /* ancho máximo del carrusel (ajusta) */
-    margin: 0 auto 30px;
-}
-
-    .featured-carousel .carousel-product-img {
-        height: 220px; /* altura fija para todas las imágenes dentro del carrusel */
-        width: auto; /* mantiene proporción */
-        object-fit: contain; /* muestra la imagen completa centrada sin recortar */
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 10px; /* pequeño padding para que no toque los bordes */
-    }
-
-/* Si prefieres recortar y llenar completamente: usar object-fit: cover; */
-/* .featured-carousel .carousel-product-img { object-fit: cover; } */
-
-/* Ajustes responsivos: en pantallas pequeñas reduce altura */
-@media (max-width: 576px) {
-    .featured-carousel .carousel-product-img {
-        height: 140px;
-    }
-}
-
-
 /* Badges sobre la imagen */
 .product-badge {
     position: absolute;

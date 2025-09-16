@@ -7,9 +7,11 @@ namespace ProyectoEcommerce.Models
         public int CategoryId { get; set; }
 
         [Required(ErrorMessage = "El nombre es obligatorio")]
-
         public string Name { get; set; }
         public string Description { get; set; }
+      
+      //  public virtual List<Product> Product { get; set; }
+
 
     }
 }

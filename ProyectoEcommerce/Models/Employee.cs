@@ -18,7 +18,7 @@ namespace ProyectoEcommerce.Models
         [DataType(DataType.Date)]
         public DateTime Contratacion { get; set; }
         public virtual List<Buy> Buys { get; set; }
-       // public virtual List<Product> Products { get; set; }
+        public virtual List<Product> Products { get; set; }
 
     }
 }

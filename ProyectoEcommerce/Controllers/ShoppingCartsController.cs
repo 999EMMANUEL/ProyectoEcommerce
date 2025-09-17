@@ -10,23 +10,23 @@ using ProyectoEcommerce.Models;
 
 namespace ProyectoEcommerce.Controllers
 {
-    public class ProductsController : Controller
+    public class ShoppingCartsController : Controller
     {
         private readonly ProyectoEcommerceContext _context;
 
-        public ProductsController(ProyectoEcommerceContext context)
+        public ShoppingCartsController(ProyectoEcommerceContext context)
         {
             _context = context;
         }
 
-        // GET: Products
+        // GET: ShoppingCarts
         public async Task<IActionResult> Index()
         {
-            var proyectoEcommerceContext = _context.Product.Include(p => p.Category).Include(p => p.Employees);
+            var proyectoEcommerceContext = _context.ShoppingCart.Include(s => s.Products);
             return View(await proyectoEcommerceContext.ToListAsync());
         }
 
-        // GET: Products/Details/5
+        // GET: ShoppingCarts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,45 +34,42 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
-                .Include(p => p.Category)
-                .Include(p => p.Employees)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var shoppingCart = await _context.ShoppingCart
+                .Include(s => s.Products)
+                .FirstOrDefaultAsync(m => m.ShoppingCartId == id);
+            if (shoppingCart == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(shoppingCart);
         }
 
-        // GET: Products/Create
+        // GET: ShoppingCarts/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name");
+            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name");
             return View();
         }
 
-        // POST: Products/Create
+        // POST: ShoppingCarts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,Available,ImageUrl,Stock,CategoryId,EmployeeId")] Product product)
+        public async Task<IActionResult> Create([Bind("ShoppingCartId,ProductId,precioUnitario,cantidad,descuento")] ShoppingCart shoppingCart)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
+                _context.Add(shoppingCart);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", product.CategoryId);
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", product.EmployeeId);
-            return View(product);
+            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name", shoppingCart.ProductId);
+            return View(shoppingCart);
         }
 
-        // GET: Products/Edit/5
+        // GET: ShoppingCarts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,24 +77,23 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
+            var shoppingCart = await _context.ShoppingCart.FindAsync(id);
+            if (shoppingCart == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", product.CategoryId);
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", product.EmployeeId);
-            return View(product);
+            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name", shoppingCart.ProductId);
+            return View(shoppingCart);
         }
 
-        // POST: Products/Edit/5
+        // POST: ShoppingCarts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Available,ImageUrl,Stock,CategoryId,EmployeeId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ShoppingCartId,ProductId,precioUnitario,cantidad,descuento")] ShoppingCart shoppingCart)
         {
-            if (id != product.Id)
+            if (id != shoppingCart.ShoppingCartId)
             {
                 return NotFound();
             }
@@ -106,12 +102,12 @@ namespace ProyectoEcommerce.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    _context.Update(shoppingCart);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!ShoppingCartExists(shoppingCart.ShoppingCartId))
                     {
                         return NotFound();
                     }
@@ -122,12 +118,11 @@ namespace ProyectoEcommerce.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", product.CategoryId);
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Name", product.EmployeeId);
-            return View(product);
+            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name", shoppingCart.ProductId);
+            return View(shoppingCart);
         }
 
-        // GET: Products/Delete/5
+        // GET: ShoppingCarts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,36 +130,35 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
-                .Include(p => p.Category)
-                .Include(p => p.Employees)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var shoppingCart = await _context.ShoppingCart
+                .Include(s => s.Products)
+                .FirstOrDefaultAsync(m => m.ShoppingCartId == id);
+            if (shoppingCart == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(shoppingCart);
         }
 
-        // POST: Products/Delete/5
+        // POST: ShoppingCarts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Product.FindAsync(id);
-            if (product != null)
+            var shoppingCart = await _context.ShoppingCart.FindAsync(id);
+            if (shoppingCart != null)
             {
-                _context.Product.Remove(product);
+                _context.ShoppingCart.Remove(shoppingCart);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        private bool ShoppingCartExists(int id)
         {
-            return _context.Product.Any(e => e.Id == id);
+            return _context.ShoppingCart.Any(e => e.ShoppingCartId == id);
         }
     }
 }

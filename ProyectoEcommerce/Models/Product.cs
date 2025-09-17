@@ -21,11 +21,11 @@ namespace ProyectoEcommerce.Models
         [Required(ErrorMessage = "El stock es obligatorio")]
         public int Stock { get; set; }
 
-   //   public int CategoryId { get; set; }
-   //   public virtual Category Category { get; set; }
+      public int CategoryId { get; set; }
+      public virtual Category Category { get; set; }
 
-      // public int EmployeeId { get; set; }
-      // public virtual Employee Employees { get; set; }   
+       public int EmployeeId { get; set; }
+       public virtual Employee Employees { get; set; }   
         public virtual List<ShoppingCart> ShoppingCarts { get; set; }
       
 

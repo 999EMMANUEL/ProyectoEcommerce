@@ -5,10 +5,8 @@ namespace ProyectoEcommerce.Models
     public class Customer
     {
         public int CustomerId { get; set; }
-        public string Nombre { get; set; }
-        [Required(ErrorMessage = "El nombre es obligatorio")]
-        public string Name { get; set; }
-        public string Apellidos { get; set; }
+        [Required(ErrorMessage = "El nombre completo es obligatorio")]
+        public string Name_full { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime FechaNacimiento { get; set; }
@@ -17,6 +15,7 @@ namespace ProyectoEcommerce.Models
         [Phone(ErrorMessage = "Número no válido")]
         public string Telefono { get; set; }
         public string Direccion { get; set; }
-        public virtual List<Buy> Buys { get; set; }
+        public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; }
+        public virtual ICollection<Buy> Buys { get; set; }
     }
 }

@@ -10,23 +10,22 @@ using ProyectoEcommerce.Models;
 
 namespace ProyectoEcommerce.Controllers
 {
-    public class ProductsController : Controller
+    public class EmployeesController : Controller
     {
         private readonly ProyectoEcommerceContext _context;
 
-        public ProductsController(ProyectoEcommerceContext context)
+        public EmployeesController(ProyectoEcommerceContext context)
         {
             _context = context;
         }
 
-        // GET: Products
+        // GET: Employees
         public async Task<IActionResult> Index()
         {
-            var proyectoEcommerceContext = _context.Products.Include(p => p.Category);
-            return View(await proyectoEcommerceContext.ToListAsync());
+            return View(await _context.Employees.ToListAsync());
         }
 
-        // GET: Products/Details/5
+        // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +33,39 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var employee = await _context.Employees
+                .FirstOrDefaultAsync(m => m.EmployeeId == id);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(employee);
         }
 
-        // GET: Products/Create
+        // GET: Employees/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
             return View();
         }
 
-        // POST: Products/Create
+        // POST: Employees/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,Available,ImageUrl,Stock,CategoryId")] Product product)
+        public async Task<IActionResult> Create([Bind("EmployeeId,Name,position,direccion,FechaNacimiento,Contratacion")] Employee employee)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
+                _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-            return View(product);
+            return View(employee);
         }
 
-        // GET: Products/Edit/5
+        // GET: Employees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +73,22 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-            return View(product);
+            return View(employee);
         }
 
-        // POST: Products/Edit/5
+        // POST: Employees/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Available,ImageUrl,Stock,CategoryId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Name,position,direccion,FechaNacimiento,Contratacion")] Employee employee)
         {
-            if (id != product.Id)
+            if (id != employee.EmployeeId)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace ProyectoEcommerce.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    _context.Update(employee);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!EmployeeExists(employee.EmployeeId))
                     {
                         return NotFound();
                     }
@@ -118,11 +113,10 @@ namespace ProyectoEcommerce.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-            return View(product);
+            return View(employee);
         }
 
-        // GET: Products/Delete/5
+        // GET: Employees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +124,34 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var employee = await _context.Employees
+                .FirstOrDefaultAsync(m => m.EmployeeId == id);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(employee);
         }
 
-        // POST: Products/Delete/5
+        // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee != null)
             {
-                _context.Products.Remove(product);
+                _context.Employees.Remove(employee);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        private bool EmployeeExists(int id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return _context.Employees.Any(e => e.EmployeeId == id);
         }
     }
 }

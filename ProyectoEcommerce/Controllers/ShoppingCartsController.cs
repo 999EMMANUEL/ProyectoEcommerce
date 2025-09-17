@@ -22,7 +22,7 @@ namespace ProyectoEcommerce.Controllers
         // GET: ShoppingCarts
         public async Task<IActionResult> Index()
         {
-            var proyectoEcommerceContext = _context.ShoppingCart.Include(s => s.Products);
+            var proyectoEcommerceContext = _context.ShoppingCarts.Include(s => s.Customer);
             return View(await proyectoEcommerceContext.ToListAsync());
         }
 
@@ -34,8 +34,8 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var shoppingCart = await _context.ShoppingCart
-                .Include(s => s.Products)
+            var shoppingCart = await _context.ShoppingCarts
+                .Include(s => s.Customer)
                 .FirstOrDefaultAsync(m => m.ShoppingCartId == id);
             if (shoppingCart == null)
             {
@@ -48,7 +48,7 @@ namespace ProyectoEcommerce.Controllers
         // GET: ShoppingCarts/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name");
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace ProyectoEcommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ShoppingCartId,ProductId,precioUnitario,cantidad,descuento")] ShoppingCart shoppingCart)
+        public async Task<IActionResult> Create([Bind("ShoppingCartId,CreatedDate,CustomerId")] ShoppingCart shoppingCart)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace ProyectoEcommerce.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name", shoppingCart.ProductId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", shoppingCart.CustomerId);
             return View(shoppingCart);
         }
 
@@ -77,12 +77,12 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var shoppingCart = await _context.ShoppingCart.FindAsync(id);
+            var shoppingCart = await _context.ShoppingCarts.FindAsync(id);
             if (shoppingCart == null)
             {
                 return NotFound();
             }
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name", shoppingCart.ProductId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", shoppingCart.CustomerId);
             return View(shoppingCart);
         }
 
@@ -91,7 +91,7 @@ namespace ProyectoEcommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ShoppingCartId,ProductId,precioUnitario,cantidad,descuento")] ShoppingCart shoppingCart)
+        public async Task<IActionResult> Edit(int id, [Bind("ShoppingCartId,CreatedDate,CustomerId")] ShoppingCart shoppingCart)
         {
             if (id != shoppingCart.ShoppingCartId)
             {
@@ -118,7 +118,7 @@ namespace ProyectoEcommerce.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Name", shoppingCart.ProductId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", shoppingCart.CustomerId);
             return View(shoppingCart);
         }
 
@@ -130,8 +130,8 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var shoppingCart = await _context.ShoppingCart
-                .Include(s => s.Products)
+            var shoppingCart = await _context.ShoppingCarts
+                .Include(s => s.Customer)
                 .FirstOrDefaultAsync(m => m.ShoppingCartId == id);
             if (shoppingCart == null)
             {
@@ -146,10 +146,10 @@ namespace ProyectoEcommerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var shoppingCart = await _context.ShoppingCart.FindAsync(id);
+            var shoppingCart = await _context.ShoppingCarts.FindAsync(id);
             if (shoppingCart != null)
             {
-                _context.ShoppingCart.Remove(shoppingCart);
+                _context.ShoppingCarts.Remove(shoppingCart);
             }
 
             await _context.SaveChangesAsync();
@@ -158,7 +158,7 @@ namespace ProyectoEcommerce.Controllers
 
         private bool ShoppingCartExists(int id)
         {
-            return _context.ShoppingCart.Any(e => e.ShoppingCartId == id);
+            return _context.ShoppingCarts.Any(e => e.ShoppingCartId == id);
         }
     }
 }

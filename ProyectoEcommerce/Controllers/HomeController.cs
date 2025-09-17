@@ -21,7 +21,7 @@ namespace ProyectoEcommerce.Controllers
         public async Task<IActionResult> Index()
         {
             // Ejemplo: mostrar hasta 8 productos disponibles ordenados por Id descendente (ajusta según necesites)
-            var productos = await _context.Product
+            var productos = await _context.Products
                                  .Where(p => p.Available)          // opcional: solo disponibles
                                  .OrderByDescending(p => p.Id)
                                  .Take(8)

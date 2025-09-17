@@ -22,7 +22,7 @@ namespace ProyectoEcommerce.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customer.ToListAsync());
+            return View(await _context.Customers.ToListAsync());
         }
 
         // GET: Customers/Details/5
@@ -33,7 +33,7 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer
+            var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (customer == null)
             {
@@ -54,7 +54,7 @@ namespace ProyectoEcommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,Nombre,Name,Apellidos,FechaNacimiento,Email,Telefono,Direccion")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerId,Name_full,FechaNacimiento,Email,Telefono,Direccion")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -73,7 +73,7 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer.FindAsync(id);
+            var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
             {
                 return NotFound();
@@ -86,7 +86,7 @@ namespace ProyectoEcommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,Nombre,Name,Apellidos,FechaNacimiento,Email,Telefono,Direccion")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,Name_full,FechaNacimiento,Email,Telefono,Direccion")] Customer customer)
         {
             if (id != customer.CustomerId)
             {
@@ -124,7 +124,7 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer
+            var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (customer == null)
             {
@@ -139,10 +139,10 @@ namespace ProyectoEcommerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _context.Customer.FindAsync(id);
+            var customer = await _context.Customers.FindAsync(id);
             if (customer != null)
             {
-                _context.Customer.Remove(customer);
+                _context.Customers.Remove(customer);
             }
 
             await _context.SaveChangesAsync();
@@ -151,7 +151,7 @@ namespace ProyectoEcommerce.Controllers
 
         private bool CustomerExists(int id)
         {
-            return _context.Customer.Any(e => e.CustomerId == id);
+            return _context.Customers.Any(e => e.CustomerId == id);
         }
     }
 }

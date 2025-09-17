@@ -5,11 +5,13 @@ namespace ProyectoEcommerce.Models
     public class ShoppingCart
     {
         public int ShoppingCartId { get; set; }
-        public int ProductId { get; set; }
-        public int precioUnitario { get; set; }
-        public int cantidad { get; set; }
-        public int descuento { get; set; }
-        public virtual Product Products { get; set; }
-        public virtual Buy buys { get; set; }
+        public DateTime CreatedDate { get; set; }
+
+        // FK
+        public int CustomerId { get; set; }
+        public virtual Customer Customer { get; set; }
+
+        // Muchos a muchos con Product
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

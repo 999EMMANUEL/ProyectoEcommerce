@@ -20,14 +20,12 @@ namespace ProyectoEcommerce.Models
         public string ImageUrl { get; set; }
         [Required(ErrorMessage = "El stock es obligatorio")]
         public int Stock { get; set; }
+        public int CategoryId { get; set; }
+        public virtual Category Category { get; set; }
 
-      public int CategoryId { get; set; }
-      public virtual Category Category { get; set; }
-
-       public int EmployeeId { get; set; }
-       public virtual Employee Employees { get; set; }   
-        public virtual List<ShoppingCart> ShoppingCarts { get; set; }
-      
+        // Relaciones
+        public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; }
+        public virtual ICollection<Buy> Buys { get; set; }
 
     }
 }

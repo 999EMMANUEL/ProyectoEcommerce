@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProyectoEcommerce.Data;
 
@@ -11,9 +12,11 @@ using ProyectoEcommerce.Data;
 namespace ProyectoEcommerce.Migrations
 {
     [DbContext(typeof(ProyectoEcommerceContext))]
-    partial class ProyectoEcommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20250916050342_ecommerce")]
+    partial class ecommerce
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,36 +24,6 @@ namespace ProyectoEcommerce.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BuyProduct", b =>
-                {
-                    b.Property<int>("BuysBuyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BuysBuyId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("BuyProducts", (string)null);
-                });
-
-            modelBuilder.Entity("ProductShoppingCart", b =>
-                {
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShoppingCartsShoppingCartId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsId", "ShoppingCartsShoppingCartId");
-
-                    b.HasIndex("ShoppingCartsShoppingCartId");
-
-                    b.ToTable("ShoppingCartProducts", (string)null);
-                });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Buy", b =>
                 {
@@ -72,6 +45,9 @@ namespace ProyectoEcommerce.Migrations
                     b.Property<decimal>("IVA")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("ShoppingCartId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Subtotal")
                         .HasColumnType("decimal(18,2)");
 
@@ -84,7 +60,7 @@ namespace ProyectoEcommerce.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("Buys");
+                    b.ToTable("Buy");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Category", b =>
@@ -104,7 +80,7 @@ namespace ProyectoEcommerce.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Customer", b =>
@@ -114,6 +90,9 @@ namespace ProyectoEcommerce.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
+
+                    b.Property<string>("Apellidos")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Direccion")
                         .HasColumnType("nvarchar(max)");
@@ -125,8 +104,11 @@ namespace ProyectoEcommerce.Migrations
                     b.Property<DateTime>("FechaNacimiento")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name_full")
+                    b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefono")
@@ -134,7 +116,7 @@ namespace ProyectoEcommerce.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customer");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Employee", b =>
@@ -163,7 +145,7 @@ namespace ProyectoEcommerce.Migrations
 
                     b.HasKey("EmployeeId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employee");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Product", b =>
@@ -183,6 +165,9 @@ namespace ProyectoEcommerce.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -200,7 +185,9 @@ namespace ProyectoEcommerce.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.ShoppingCart", b =>
@@ -211,105 +198,129 @@ namespace ProyectoEcommerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShoppingCartId"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("buysBuyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<int>("descuento")
+                        .HasColumnType("int");
+
+                    b.Property<int>("precioUnitario")
                         .HasColumnType("int");
 
                     b.HasKey("ShoppingCartId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("ProductId");
 
-                    b.ToTable("ShoppingCarts");
+                    b.HasIndex("buysBuyId");
+
+                    b.ToTable("ShoppingCart");
                 });
 
-            modelBuilder.Entity("BuyProduct", b =>
+            modelBuilder.Entity("ProyectoEcommerce.Models.Testimonial", b =>
                 {
-                    b.HasOne("ProyectoEcommerce.Models.Buy", null)
-                        .WithMany()
-                        .HasForeignKey("BuysBuyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("TestimonialId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("ProyectoEcommerce.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestimonialId"));
 
-            modelBuilder.Entity("ProductShoppingCart", b =>
-                {
-                    b.HasOne("ProyectoEcommerce.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasOne("ProyectoEcommerce.Models.ShoppingCart", null)
-                        .WithMany()
-                        .HasForeignKey("ShoppingCartsShoppingCartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TestimonialId");
+
+                    b.ToTable("Testimonial");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Buy", b =>
                 {
-                    b.HasOne("ProyectoEcommerce.Models.Customer", "Customer")
+                    b.HasOne("ProyectoEcommerce.Models.Customer", "Customers")
                         .WithMany("Buys")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProyectoEcommerce.Models.Employee", "Employee")
-                        .WithMany("BuysHandled")
+                    b.HasOne("ProyectoEcommerce.Models.Employee", "Employees")
+                        .WithMany("Buys")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("Customers");
 
-                    b.Navigation("Employee");
+                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Product", b =>
                 {
                     b.HasOne("ProyectoEcommerce.Models.Category", "Category")
-                        .WithMany("Products")
+                        .WithMany("Product")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ProyectoEcommerce.Models.Employee", "Employees")
+                        .WithMany("Products")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.ShoppingCart", b =>
                 {
-                    b.HasOne("ProyectoEcommerce.Models.Customer", "Customer")
+                    b.HasOne("ProyectoEcommerce.Models.Product", "Products")
                         .WithMany("ShoppingCarts")
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.HasOne("ProyectoEcommerce.Models.Buy", "buys")
+                        .WithMany("ShoppingCarts")
+                        .HasForeignKey("buysBuyId");
+
+                    b.Navigation("Products");
+
+                    b.Navigation("buys");
+                });
+
+            modelBuilder.Entity("ProyectoEcommerce.Models.Buy", b =>
+                {
+                    b.Navigation("ShoppingCarts");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Category", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Customer", b =>
                 {
                     b.Navigation("Buys");
-
-                    b.Navigation("ShoppingCarts");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Employee", b =>
                 {
-                    b.Navigation("BuysHandled");
+                    b.Navigation("Buys");
+
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ProyectoEcommerce.Models.Product", b =>
+                {
+                    b.Navigation("ShoppingCarts");
                 });
 #pragma warning restore 612, 618
         }

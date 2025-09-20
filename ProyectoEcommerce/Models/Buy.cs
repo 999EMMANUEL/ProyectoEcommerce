@@ -6,8 +6,8 @@ namespace ProyectoEcommerce.Models
     {
         public int BuyId { get; set; }
 
-        [Required(ErrorMessage = "El ID del carro es obligatorio")]
-        public int ShoppingCartId { get; set; }
+        /*[Required(ErrorMessage = "El ID del carro es obligatorio")]
+        public int ShoppingCartId { get; set; }*/
         [Required(ErrorMessage = "El ID del Cliente es obligatorio")]
         public int CustomerId { get; set; }
         [Required(ErrorMessage = "El ID del empleado es obligatorio")]
@@ -17,8 +17,11 @@ namespace ProyectoEcommerce.Models
         public decimal Subtotal { get; set; }
         public decimal IVA { get; set; }
         public decimal Total { get; set; }
-        public virtual List<ShoppingCart> ShoppingCarts { get; set; }
-        public virtual Customer Customers { get; set; }
-        public virtual Employee Employees { get; set; }
+
+        public virtual Customer Customer { get; set; }
+        public virtual Employee Employee { get; set; }
+
+        // Muchos a muchos con Product
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

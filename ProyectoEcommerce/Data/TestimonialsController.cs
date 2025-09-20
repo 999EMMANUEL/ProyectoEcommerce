@@ -9,7 +9,7 @@ using ProyectoEcommerce.Data;
 using ProyectoEcommerce.Models;
 
 namespace ProyectoEcommerce.Controllers
-{
+{/*
     public class TestimonialsController : Controller
     {
         private readonly ProyectoEcommerceContext _context;
@@ -153,5 +153,5 @@ namespace ProyectoEcommerce.Controllers
         {
             return _context.Testimonial.Any(e => e.TestimonialId == id);
         }
-    }
+    }*/
 }

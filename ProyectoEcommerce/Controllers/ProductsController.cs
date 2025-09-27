@@ -22,7 +22,8 @@ namespace ProyectoEcommerce.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Product.ToListAsync());
+            var proyectoEcommerceContext = _context.Products.Include(p => p.Category);
+            return View(await proyectoEcommerceContext.ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -33,7 +34,8 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
+            var product = await _context.Products
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
@@ -46,6 +48,7 @@ namespace ProyectoEcommerce.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace ProyectoEcommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,Available,ImageUrl")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,Available,ImageUrl,Stock,CategoryId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace ProyectoEcommerce.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -73,11 +77,12 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -86,7 +91,7 @@ namespace ProyectoEcommerce.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Available,ImageUrl")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Available,ImageUrl,Stock,CategoryId")] Product product)
         {
             if (id != product.Id)
             {
@@ -113,6 +118,7 @@ namespace ProyectoEcommerce.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -124,7 +130,8 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
+            var product = await _context.Products
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
@@ -139,10 +146,10 @@ namespace ProyectoEcommerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Product.FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
-                _context.Product.Remove(product);
+                _context.Products.Remove(product);
             }
 
             await _context.SaveChangesAsync();
@@ -151,7 +158,7 @@ namespace ProyectoEcommerce.Controllers
 
         private bool ProductExists(int id)
         {
-            return _context.Product.Any(e => e.Id == id);
+            return _context.Products.Any(e => e.Id == id);
         }
     }
 }

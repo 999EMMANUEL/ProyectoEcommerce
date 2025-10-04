@@ -10,23 +10,23 @@ using ProyectoEcommerce.Models;
 
 namespace ProyectoEcommerce.Controllers
 {
-    public class ProductsController : Controller
+    public class BuysController : Controller
     {
         private readonly ProyectoEcommerceContext _context;
 
-        public ProductsController(ProyectoEcommerceContext context)
+        public BuysController(ProyectoEcommerceContext context)
         {
             _context = context;
         }
 
-        // GET: Products
+        // GET: Buys
         public async Task<IActionResult> Index()
         {
-            var proyectoEcommerceContext = _context.Products.Include(p => p.Category);
+            var proyectoEcommerceContext = _context.Buys.Include(b => b.Customer).Include(b => b.Employee);
             return View(await proyectoEcommerceContext.ToListAsync());
         }
 
-        // GET: Products/Details/5
+        // GET: Buys/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +34,45 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var buy = await _context.Buys
+                .Include(b => b.Customer)
+                .Include(b => b.Employee)
+                .FirstOrDefaultAsync(m => m.BuyId == id);
+            if (buy == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(buy);
         }
 
-        // GET: Products/Create
+        // GET: Buys/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email");
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name");
             return View();
         }
 
-        // POST: Products/Create
+        // POST: Buys/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,Available,ImageUrl,Stock,CategoryId")] Product product)
+        public async Task<IActionResult> Create([Bind("BuyId,CustomerId,EmployeeId,Fecha,Subtotal,IVA,Total")] Buy buy)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
+                _context.Add(buy);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-            return View(product);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", buy.CustomerId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name", buy.EmployeeId);
+            return View(buy);
         }
 
-        // GET: Products/Edit/5
+        // GET: Buys/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +80,24 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var buy = await _context.Buys.FindAsync(id);
+            if (buy == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-            return View(product);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", buy.CustomerId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name", buy.EmployeeId);
+            return View(buy);
         }
 
-        // POST: Products/Edit/5
+        // POST: Buys/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Available,ImageUrl,Stock,CategoryId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("BuyId,CustomerId,EmployeeId,Fecha,Subtotal,IVA,Total")] Buy buy)
         {
-            if (id != product.Id)
+            if (id != buy.BuyId)
             {
                 return NotFound();
             }
@@ -102,12 +106,12 @@ namespace ProyectoEcommerce.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    _context.Update(buy);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!BuyExists(buy.BuyId))
                     {
                         return NotFound();
                     }
@@ -118,11 +122,12 @@ namespace ProyectoEcommerce.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.CategoryId);
-            return View(product);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", buy.CustomerId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name", buy.EmployeeId);
+            return View(buy);
         }
 
-        // GET: Products/Delete/5
+        // GET: Buys/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +135,36 @@ namespace ProyectoEcommerce.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var buy = await _context.Buys
+                .Include(b => b.Customer)
+                .Include(b => b.Employee)
+                .FirstOrDefaultAsync(m => m.BuyId == id);
+            if (buy == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(buy);
         }
 
-        // POST: Products/Delete/5
+        // POST: Buys/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
+            var buy = await _context.Buys.FindAsync(id);
+            if (buy != null)
             {
-                _context.Products.Remove(product);
+                _context.Buys.Remove(buy);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        private bool BuyExists(int id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return _context.Buys.Any(e => e.BuyId == id);
         }
     }
 }

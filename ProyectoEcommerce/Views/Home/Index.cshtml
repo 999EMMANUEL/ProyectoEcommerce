@@ -4,10 +4,34 @@
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/maps.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 }
+@section Scripts {
+    <!-- API Key CORREGIDA y optimizada -->
+    <script>
+        function loadGoogleMaps() {
+            const script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyASg-6uv9BAJVu5haLhf3iimD8X1Xhnaas&callback=initMap';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+        window.onload = loadGoogleMaps;
+    </script>
+    <script src="~/js/maps.js" asp-append-version="true"></script>
+}
+
+
+
+
+
+
 <main class="main-content">
     <h1 class="section-title">Productos Destacados</h1>
 
+
+    <!-- loop  que muestra los productos, crea una tarjeta para cada producto-->
     <div class="products-grid">
         @foreach (var item in Model)
         {
@@ -33,7 +57,7 @@
                             }
                             else
                             {
-                                imgSrc = Url.Content("~/images/products/placeholder.jpg"); // placeholder
+                                imgSrc = Url.Content("~/images/products/placeholder.jpg"); // placeholder --:genera un 404 () IMAGEN FANTASMA / ver en console de desarrollador...NO afecta 
                             }
                         }
 
@@ -91,6 +115,11 @@
 </a>
 <li class="nav-item">
     <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Productos</a>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Buys" asp-action="Index">buys</a>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Employees" asp-action="Index">Employees</a>
+    <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCarts" asp-action="Index">ShoppingCarts</a>
 </li>
 
 <!-- Reseñas de usuarios ( guía visual — sin lógica ) -->
@@ -142,33 +171,39 @@
     </div>
 </section>
 
-<!-- Mapa + Sucursales (lado a lado) -->
+
+
+
+<!-- Mapa + Sucursales -->
 <section class="map-branches container" aria-label="Mapa y sucursales">
+    <h2 class="section-title">ENCUÉNTRANOS</h2>
+
     <div class="map-branches-grid">
         <!-- Columna: Mapa -->
         <div class="map-column">
-            <h2 class="map-title">Encuéntranos</h2>
             <div class="map-wrapper" role="application" aria-label="Mapa de sucursales">
-                <!-- Tu iframe (ya existente) -->
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d583.836237941427!2d-85.44659042062092!3d10.134533464034956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f9fb0ad9493f9cf%3A0x12f243e7463b8ae2!2sUniversidad%20Nacional%2C%20150%2C%20Provincia%20de%20Guanacaste%2C%20Nicoya!5e0!3m2!1ses-419!2scr!4v1757747295459!5m2!1ses-419!2scr"
-                        class="responsive-iframe"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        title="Mapa de sucursales">
-                </iframe>
+                <div id="map">
+                    <div class="map-loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Cargando mapa...</p>
+                    </div>
+                </div>
+                <div class="map-actions">
+                    <button id="locate-me">
+                        <i class="fas fa-location-arrow"></i> Mi ubicación
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Columna: Lista de sucursales -->
         <aside class="branches-column" aria-labelledby="branches-title">
-            <h2 id="branches-title" class="branches-title">Sucursales disponibles</h2>
+            <h3 id="branches-title" class="branches-title">Sucursales disponibles</h3>
 
-            <!-- Lista de sucursales estática (guía visual) -->
             <div class="branches-list">
                 <!-- Sucursal 1 -->
-                <article class="branch-card" tabindex="0" aria-labelledby="branch1-name">
+                <article class="branch-card" tabindex="0" aria-labelledby="branch1-name"
+                         data-lat="10.134533" data-lng="-85.446590" data-branch="central">
                     <div class="branch-header">
                         <strong id="branch1-name" class="branch-name">Sucursal Central - Nicoya</strong>
                         <span class="branch-distance">A 2.1 km</span>
@@ -182,7 +217,8 @@
                 </article>
 
                 <!-- Sucursal 2 -->
-                <article class="branch-card" tabindex="0" aria-labelledby="branch2-name">
+                <article class="branch-card" tabindex="0" aria-labelledby="branch2-name"
+                         data-lat="10.140000" data-lng="-85.450000" data-branch="plaza">
                     <div class="branch-header">
                         <strong id="branch2-name" class="branch-name">Sucursal Plaza Oeste</strong>
                         <span class="branch-distance">A 12.5 km</span>
@@ -196,7 +232,8 @@
                 </article>
 
                 <!-- Sucursal 3 -->
-                <article class="branch-card" tabindex="0" aria-labelledby="branch3-name">
+                <article class="branch-card" tabindex="0" aria-labelledby="branch3-name"
+                         data-lat="10.120000" data-lng="-85.430000" data-branch="playa">
                     <div class="branch-header">
                         <strong id="branch3-name" class="branch-name">Punto Express - Playa</strong>
                         <span class="branch-distance">A 35 km</span>
@@ -209,6 +246,73 @@
                     </div>
                 </article>
             </div>
+
+            <!-- Barra de búsqueda -->
+            <div class="search-box">
+                <input type="text" id="branch-search" placeholder="Escribe aquí para buscar...">
+                <i class="fas fa-search"></i>
+            </div>
         </aside>
     </div>
 </section>
+
+
+
+
+
+<!--  script de diagnóstico 
+<script>
+    // Diagnóstico COMPLETO para encontrar la imagen fantasma
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🔍 Búsqueda profunda de la imagen con src="/11"');
+
+        // 1. Buscar en todo el DOM
+        const allImages = document.querySelectorAll('img');
+        let ghostImage = null;
+
+        allImages.forEach(img => {
+            if (img.src.includes('/11') || img.getAttribute('src') === '/11') {
+                console.log('🚨 IMAGEN FANTASMA ENCONTRADA:', img);
+                console.log('📍 Ubicación:', img.parentElement);
+                console.log('🖼️ Src completo:', img.src);
+                console.log('🏷️ Alt:', img.alt);
+                console.log('🧩 HTML completo:', img.outerHTML);
+                ghostImage = img;
+            }
+        });
+
+        // 2. Si no se encuentra, podría ser dinámica
+        if (!ghostImage) {
+            console.log('⚠️ No encontrada en DOM inicial - puede ser dinámica');
+
+            // Observar cambios en el DOM
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeName === 'IMG' &&
+                            (node.src.includes('/11') || node.getAttribute('src') === '/11')) {
+                            console.log('🚨 IMAGEN DINÁMICA ENCONTRADA:', node);
+                            node.remove();
+                        }
+                    });
+                });
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+        } else {
+            
+            ghostImage.src = '/images/placeholder.jpg';
+            console.log('✅ Imagen problemática reemplazada');
+        }
+
+        // 4. Verificar también datos de productos
+        console.log('📦 Revisando datos de productos...');
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach((card, index) => {
+            const img = card.querySelector('img');
+            if (img && img.src.includes('/11')) {
+                console.log(`🚨 Producto ${index + 1} tiene imagen problemática`);
+            }
+        });
+    });
+</script> -->

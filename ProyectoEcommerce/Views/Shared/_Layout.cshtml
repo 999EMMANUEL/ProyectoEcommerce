@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ProyectoEcommerce</title>
+    <title>@ViewData["Title"] - InnovaTech</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
@@ -14,7 +14,6 @@
 <body>
     <header>
         <div class="header-top">
-            <!-- Razor view: Anchor Tag Helper genera el href automáticamente -->
             <a asp-controller="Home" asp-action="Index" class="logo">
                 <img src="https://i.postimg.cc/K8Kyg8yD/Imagen1.png"
                      width="320" height="100" alt="logo" style="display:block;" />
@@ -29,6 +28,15 @@
                 <a href="#" class="header-btn">Mi Cuenta</a>
                 <a href="#" class="header-btn">Favoritos</a>
                 <a href="#" class="header-btn">Carrito <span class="cart-badge">3</span></a>
+
+                <!-- Botón Accesibilidad -->
+                <button id="btnAccessibility"
+                        class="accessibility-btn"
+                        aria-controls="accessibilityPanel"
+                        aria-expanded="false"
+                        aria-haspopup="dialog">
+                    ♿ Accesibilidad
+                </button>
             </div>
         </div>
 
@@ -48,7 +56,6 @@
                         <a href="#">Wearables</a>
                         <a href="#">Accesorios</a>
                     </div>
-
                 </div>
 
                 <div class="nav-links">
@@ -60,6 +67,7 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -70,64 +78,51 @@
         <div class="container">
             <div class="footer-content">
                 <p>
-                    &copy; 2025 - ProyectoEcommerce -
-                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Politicas y privacidad</a> |
-                    <a asp-area="" asp-controller="Home" asp-action="LegalInformation">Informacion legal</a> |
+                    &copy; 2025 - InnovaTech -
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Políticas y privacidad</a> |
+                    <a asp-area="" asp-controller="Home" asp-action="LegalInformation">Información legal</a> |
                     <a asp-area="" asp-controller="Home" asp-action="SocialMedia">Redes sociales</a>
                 </p>
             </div>
         </div>
+    </footer>
 
-        <!-- Botón flotante de accesibilidad -->
-        <button class="accessibility-btn" onclick="toggleAccessibilityPanel()">
-            accesibilidad
-        </button>
 
-        <!-- Panel de opciones -->
-        <div class="accessibility-panel" id="accessibilityPanel">
-            <div class="accessibility-options" id="accessibilityOptions">
-                <!-- opciones aquí -->       
-                <div class="option-group">
-                    <h4>Tamaño de texto</h4>
-                    <div class="btn-group">
-                        <button id="font-small" class="font-size-btn">A-</button>
-                        <button id="font-normal" class="font-size-btn active">A</button>
-                        <button id="font-large" class="font-size-btn">A+</button>
-                        <button id="font-xlarge" class="font-size-btn">A++</button>
-                    </div>
-                </div>
 
-                <div class="option-group">
-                    <h4>Contraste</h4>
-                    <div class="btn-group">
-                        <button id="contrast-normal" class="contrast-btn active">Normal</button>
-                        <button id="contrast-high" class="contrast-btn">Alto</button>
-                        <button id="contrast-inverted" class="contrast-btn">Invertido</button>
-                    </div>
-                </div>
-
-                <div class="option-group">
-                    <button id="reset-accessibility" class="btn btn-sm btn-outline-secondary">
-                        Restablecer
-                    </button>
+    <!-- Panel de accesibilidad -->
+    <div class="accessibility-panel" id="accessibilityPanel" role="dialog" aria-modal="false">
+        <div class="accessibility-options" id="accessibilityOptions">
+            <div class="option-group">
+                <h4>Tamaño de texto</h4>
+                <div class="btn-group">
+                    <button id="font-small" class="font-size-btn">A-</button>
+                    <button id="font-normal" class="font-size-btn active">A</button>
+                    <button id="font-large" class="font-size-btn">A+</button>
+                    <button id="font-xlarge" class="font-size-btn">A++</button>
                 </div>
             </div>
+
+            <div class="option-group">
+                <h4>Contraste</h4>
+                <div class="btn-group">
+                    <button id="contrast-normal" class="contrast-btn active">Normal</button>
+                    <button id="contrast-high" class="contrast-btn">Alto</button>
+                    <button id="contrast-inverted" class="contrast-btn">Invertido</button>
+                </div>
+            </div>
+
+            <div class="option-group">
+                <button id="reset-accessibility" class="btn btn-sm btn-outline-secondary">
+                    Restablecer
+                </button>
+            </div>
         </div>
+    </div>
 
-        <script>
-            function toggleAccessibilityPanel() {
-                const panel = document.getElementById('accessibilityOptions');
-                panel.classList.toggle('show');
-            }
-
-        </script>
-
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/Accessibility.js"></script>
+    <script src="~/js/Accessibility.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 </html>

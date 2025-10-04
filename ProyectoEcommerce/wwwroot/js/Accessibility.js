@@ -1,4 +1,5 @@
-﻿class AccessibilityOptions {
+﻿// Accessibility.js - Control del panel de accesibilidad
+class AccessibilityOptions {
     constructor() {
         this.init();
     }
@@ -7,144 +8,173 @@
         console.log('Accessibility options initialized');
         this.loadSavedOptions();
         this.setupEventListeners();
+        this.setupPanelToggle();
     }
 
     loadSavedOptions() {
-        const fontSize = localStorage.getItem('fontSize') || 'normal';
-        const contrast = localStorage.getItem('contrast') || 'normal';
+        const fontSize = localStorage.getItem('accessibility-fontSize') || 'normal';
+        const contrast = localStorage.getItem('accessibility-contrast') || 'normal';
 
         console.log('Loading saved options:', { fontSize, contrast });
 
         this.applyFontSize(fontSize);
         this.applyContrast(contrast);
+        this.updateActiveButtons();
     }
 
     setupEventListeners() {
         console.log('Setting up event listeners');
 
-        // Usar event delegation para mayor confiabilidad
+        // Event delegation para los botones de accesibilidad
         document.addEventListener('click', (e) => {
-            if (e.target.matches('.font-size-btn, .contrast-btn, #reset-accessibility')) {
+            if (e.target.classList.contains('font-size-btn')) {
                 e.preventDefault();
-
-                if (e.target.id === 'font-small') this.setFontSize('small');
-                else if (e.target.id === 'font-normal') this.setFontSize('normal');
-                else if (e.target.id === 'font-large') this.setFontSize('large');
-                else if (e.target.id === 'font-xlarge') this.setFontSize('xlarge');
-                else if (e.target.id === 'contrast-normal') this.setContrast('normal');
-                else if (e.target.id === 'contrast-high') this.setContrast('high');
-                else if (e.target.id === 'contrast-inverted') this.setContrast('inverted');
-                else if (e.target.id === 'reset-accessibility') this.resetOptions();
+                const size = e.target.id.replace('font-', '');
+                this.setFontSize(size);
+            }
+            else if (e.target.classList.contains('contrast-btn')) {
+                e.preventDefault();
+                const contrast = e.target.id.replace('contrast-', '');
+                this.setContrast(contrast);
+            }
+            else if (e.target.id === 'reset-accessibility') {
+                e.preventDefault();
+                this.resetOptions();
             }
         });
     }
 
+    setupPanelToggle() {
+        const btn = document.getElementById('btnAccessibility');
+        const panel = document.getElementById('accessibilityPanel');
+
+        if (!btn || !panel) {
+            console.error('No se encontraron los elementos del panel de accesibilidad');
+            return;
+        }
+
+        const togglePanel = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (panel.classList.contains('is-open')) {
+                panel.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            } else {
+                panel.classList.add('is-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        };
+
+        // Cerrar panel al hacer clic fuera
+        const closePanel = (e) => {
+            if (panel.classList.contains('is-open') &&
+                !panel.contains(e.target) &&
+                e.target !== btn) {
+                panel.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        };
+
+        // Cerrar con tecla Escape
+        const closeOnEscape = (e) => {
+            if (e.key === 'Escape' && panel.classList.contains('is-open')) {
+                panel.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.focus();
+            }
+        };
+
+        btn.addEventListener('click', togglePanel);
+        document.addEventListener('click', closePanel);
+        document.addEventListener('keydown', closeOnEscape);
+    }
+
     setFontSize(size) {
         console.log('Setting font size to:', size);
-        localStorage.setItem('fontSize', size);
+        localStorage.setItem('accessibility-fontSize', size);
         this.applyFontSize(size);
+        this.updateActiveButtons();
     }
 
     setContrast(contrast) {
         console.log('Setting contrast to:', contrast);
-        localStorage.setItem('contrast', contrast);
+        localStorage.setItem('accessibility-contrast', contrast);
         this.applyContrast(contrast);
+        this.updateActiveButtons();
     }
 
     applyFontSize(size) {
-        const sizes = {
-            'small': '14px',
-            'normal': '16px',
-            'large': '18px',
-            'xlarge': '20px'
-        };
+        // Limpiar clases anteriores
+        const body = document.body;
+        body.classList.remove('font-small', 'font-normal', 'font-large', 'font-xlarge');
 
-        // Aplicar directamente al body con !important mediante style attribute
-        document.body.style.setProperty('font-size', sizes[size], 'important');
+        // Aplicar nueva clase
+        body.classList.add(`font-${size}`);
 
-        // También establecer variable CSS
-        document.documentElement.style.setProperty('--current-font-size', sizes[size]);
-
-        this.updateActiveButtons('font', size);
+        console.log('Applied font size class:', `font-${size}`);
     }
 
     applyContrast(contrast) {
         console.log('Applying contrast:', contrast);
 
         // Remover todas las clases de contraste
-        document.body.classList.remove('high-contrast', 'inverted-contrast');
+        document.body.classList.remove('high-contrast-mode', 'inverted-contrast-mode');
 
         // Aplicar nueva clase
         if (contrast === 'high') {
-            document.body.classList.add('high-contrast');
+            document.body.classList.add('high-contrast-mode');
         } else if (contrast === 'inverted') {
-            document.body.classList.add('inverted-contrast');
+            document.body.classList.add('inverted-contrast-mode');
         }
-
-        this.updateActiveButtons('contrast', contrast);
     }
 
-    updateActiveButtons(type, value) {
-        // Remover active de todos los botones del tipo
-        document.querySelectorAll(`.${type}-size-btn, .${type}-btn`).forEach(btn => {
+    updateActiveButtons() {
+        const fontSize = localStorage.getItem('accessibility-fontSize') || 'normal';
+        const contrast = localStorage.getItem('accessibility-contrast') || 'normal';
+
+        // Actualizar botones de tamaño de fuente
+        document.querySelectorAll('.font-size-btn').forEach(btn => {
             btn.classList.remove('active');
         });
+        const fontActiveBtn = document.getElementById(`font-${fontSize}`);
+        if (fontActiveBtn) {
+            fontActiveBtn.classList.add('active');
+            console.log('Active font button:', fontActiveBtn.id);
+        }
 
-        // Agregar active al botón correspondiente
-        const activeBtn = document.getElementById(`${type}-${value}`);
-        if (activeBtn) {
-            activeBtn.classList.add('active');
+        // Actualizar botones de contraste
+        document.querySelectorAll('.contrast-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        const contrastActiveBtn = document.getElementById(`contrast-${contrast}`);
+        if (contrastActiveBtn) {
+            contrastActiveBtn.classList.add('active');
+            console.log('Active contrast button:', contrastActiveBtn.id);
         }
     }
 
     resetOptions() {
         console.log('Resetting accessibility options');
-        localStorage.removeItem('fontSize');
-        localStorage.removeItem('contrast');
+        localStorage.removeItem('accessibility-fontSize');
+        localStorage.removeItem('accessibility-contrast');
 
-        // Resetear estilos
-        document.body.style.fontSize = '';
-        document.body.classList.remove('high-contrast', 'inverted-contrast');
+        // Resetear a valores por defecto
+        this.applyFontSize('normal');
+        this.applyContrast('normal');
+        this.updateActiveButtons();
 
-        this.updateActiveButtons('font', 'normal');
-        this.updateActiveButtons('contrast', 'normal');
+        console.log('All options reset to default');
     }
 }
 
-// Inicialización mejorada
-function initAccessibility() {
-    // Esperar a que el DOM esté completamente cargado
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.accessibility = new AccessibilityOptions();
-        });
-    } else {
+// Inicialización cuando el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
         window.accessibility = new AccessibilityOptions();
-    }
+        console.log('Accessibility system loaded');
+    });
+} else {
+    window.accessibility = new AccessibilityOptions();
+    console.log('Accessibility system loaded (DOM already ready)');
 }
-
-// Función global para el toggle
-window.toggleAccessibilityPanel = function () {
-    const panel = document.getElementById('accessibilityOptions');
-    if (panel) {
-        panel.classList.toggle('show');
-        console.log('Panel visibility toggled');
-    }
-}
-
-/*document.addEventListener('click', function (e) {
-    const panel = document.getElementById('accessibilityOptions');
-    const btn = document.querySelector('.accessibility-btn');
-
-    if (!panel.contains(e.target) && e.target !== btn) {
-        panel.classList.remove('show');
-    }
-});*/
-
-function toggleAccessibilityPanel() {
-    const panel = document.getElementById('accessibilityOptions');
-    panel.classList.toggle('show');
-}
-
-// Iniciar
-initAccessibility();

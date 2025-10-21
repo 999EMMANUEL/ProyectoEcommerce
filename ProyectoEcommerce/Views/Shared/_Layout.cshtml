@@ -1,4 +1,84 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager SignInManager
+@inject UserManager UserManager
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                Buscar
+
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    Hola, @User.Identity.Name
+
+        Cerrar Sesión
+
+                }
+else
+{
+    Iniciar Sesión
+                    Registrarse
+                }
+
+                Favoritos
+                Carrito 3
+                ♿ Accesibilidad
+
+
+
+
+
+
+                    Categorías
+
+                        Computadoras
+                        Smartphones
+
+
+
+
+
+                    Sobre Nosotros
+                    Promociones
+                    Contáctenos
+
+@* Enlaces solo para administradores *@
+@if (User.IsInRole("Admin"))
+{
+
+                            🛡️ ADMIN
+                            Gestión Productos
+                            Gestión Categorías
+                            Clientes
+                            Empleados
+                            Comentarios
+                            Ventas
+
+                    }
+
+
+
+
+
+
+
+@RenderBody()
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />

@@ -1,65 +1,48 @@
 ﻿@model IEnumerable<ProyectoEcommerce.Models.Buy>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Administrar compras";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Crear nueva compra</a>
+    </p>
+}
+
+<table class="table table-striped align-middle">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Fecha)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Subtotal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IVA)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Total)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th></th>
+            <th>Fecha</th>
+            <th class="text-end">Subtotal</th>
+            <th class="text-end">IVA</th>
+            <th class="text-end">Total</th>
+            <th>Cliente</th>
+            <th>Empleado</th>
+            <th class="text-end">Acciones</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fecha)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subtotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IVA)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Total)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.BuyId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BuyId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.BuyId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model ?? Enumerable.Empty<ProyectoEcommerce.Models.Buy>())
+        {
+            <tr>
+                <td>@item.Fecha</td>
+                <td class="text-end">₡@item.Subtotal</td>
+                <td class="text-end">₡@item.IVA</td>
+                <td class="text-end fw-semibold">₡@item.Total</td>
+                <td>@item.Customer?.Email</td>
+                <td>@item.Employee?.Name</td>
+                <td class="text-end">
+                    <a asp-action="Details" asp-route-id="@item.BuyId" class="btn btn-sm btn-outline-secondary">Ver</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.BuyId" class="btn btn-sm btn-outline-primary ms-1">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.BuyId" class="btn btn-sm btn-outline-danger ms-1">Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

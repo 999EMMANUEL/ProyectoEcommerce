@@ -1,41 +1,38 @@
 ﻿@model IEnumerable<ProyectoEcommerce.Models.ShoppingCart>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Administrar carritos";
 }
+<h1>@ViewData["Title"]</h1>
 
-<h1>Index</h1>
+<p><a asp-action="Create" class="btn btn-primary">Crear carrito</a></p>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ShoppingCartId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ShoppingCartId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ShoppingCartId">Delete</a>
-            </td>
-        </tr>
+@if (!(Model?.Any() ?? false))
+{
+    <div class="alert alert-info">No hay carritos registrados.</div>
 }
-    </tbody>
-</table>
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Creado</th>
+                <th>Cliente (email)</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CreatedDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@item.Customer?.Email</td>
+                    <td class="text-end">
+                        <a asp-action="Details" asp-route-id="@item.ShoppingCartId" class="btn btn-sm btn-outline-secondary">Ver</a>
+                        <a asp-action="Edit" asp-route-id="@item.ShoppingCartId" class="btn btn-sm btn-outline-primary ms-1">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.ShoppingCartId" class="btn btn-sm btn-outline-danger ms-1">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;          // ← NUEVO
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProyectoEcommerce.Data;
 using ProyectoEcommerce.Models;
 
 namespace ProyectoEcommerce.Controllers
 {
+    [Authorize(Roles = "Admin")]                    // ← TODO el controlador es SOLO Admin por defecto
     public class CategoriesController : Controller
     {
         private readonly ProyectoEcommerceContext _context;
@@ -19,28 +19,35 @@ namespace ProyectoEcommerce.Controllers
             _context = context;
         }
 
-        // GET: Categories
-        public async Task<IActionResult> Index()
+        // ========= PÁGINA PÚBLICA (visible a clientes) =========
+        [AllowAnonymous]                            // ← Cualquiera puede entrar
+        public async Task<IActionResult> Public()
         {
-            return View(await _context.Categories.ToListAsync());
+            var data = await _context.Categories
+                //.Where(c => c.Activa)             // ← si tienes un flag Activa, puedes filtrar
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            return View(data); // Views/Categories/Public.cshtml
         }
 
-        // GET: Categories/Details/5
+        // (Opcional) Detalle público
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+            if (category == null) return NotFound();
 
-            return View(category);
+            return View(category); // Views/Categories/Details.cshtml (puede ser la misma que ya tienes)
+        }
+
+        // ========= ADMIN (CRUD) =========
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Categories.ToListAsync());
         }
 
         // GET: Categories/Create
@@ -50,86 +57,58 @@ namespace ProyectoEcommerce.Controllers
         }
 
         // POST: Categories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CategoryId,Name,Description")] Category category)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(category);
+            if (!ModelState.IsValid) return View(category);
+
+            _context.Add(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+            if (category == null) return NotFound();
+
             return View(category);
         }
 
         // POST: Categories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryId,Name,Description")] Category category)
         {
-            if (id != category.CategoryId)
-            {
-                return NotFound();
-            }
+            if (id != category.CategoryId) return NotFound();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(category);
+
+            try
             {
-                try
-                {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CategoryExists(category.CategoryId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(category);
+                await _context.SaveChangesAsync();
             }
-            return View(category);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CategoryExists(category.CategoryId)) return NotFound();
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+            if (category == null) return NotFound();
 
             return View(category);
         }
@@ -143,9 +122,8 @@ namespace ProyectoEcommerce.Controllers
             if (category != null)
             {
                 _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

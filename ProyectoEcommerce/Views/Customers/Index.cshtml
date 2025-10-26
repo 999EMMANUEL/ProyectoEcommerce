@@ -1,59 +1,46 @@
 ﻿@model IEnumerable<ProyectoEcommerce.Models.Customer>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Administrar clientes";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+@if (User.IsInRole("Admin")) //PANEL USUARIO ADMINSITRADOR
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Crear cliente</a>
+    </p>
+}
+
+<table class="table table-striped align-middle">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name_full)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaNacimiento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Telefono)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Direccion)
-            </th>
-            <th></th>
+            <th>Nombre completo</th>
+            <th>Fecha de nacimiento</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th class="text-end">Acciones</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name_full)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaNacimiento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CustomerId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model ?? Enumerable.Empty<ProyectoEcommerce.Models.Customer>())
+        {
+            <tr>
+                <td>@item.Name_full</td>
+              
+                <td>@item.Email</td>
+                <td>@item.Telefono</td>
+                <td class="text-truncate" style="max-width: 360px;">@item.Direccion</td>
+                <td class="text-end">
+                    <a asp-action="Details" asp-route-id="@item.CustomerId" class="btn btn-sm btn-outline-secondary">Ver</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.CustomerId" class="btn btn-sm btn-outline-primary ms-1">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.CustomerId" class="btn btn-sm btn-outline-danger ms-1">Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

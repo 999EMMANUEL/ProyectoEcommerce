@@ -12,7 +12,7 @@ using ProyectoEcommerce.Data;
 namespace ProyectoEcommerce.Migrations
 {
     [DbContext(typeof(ProyectoEcommerceContext))]
-    [Migration("20250917014913_InitialCreate")]
+    [Migration("20250926005146_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

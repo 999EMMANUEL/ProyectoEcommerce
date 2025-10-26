@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +9,7 @@ using ProyectoEcommerce.Models;
 
 namespace ProyectoEcommerce.Controllers
 {
+    [Authorize] // ← requiere login por defecto
     public class BuysController : Controller
     {
         private readonly ProyectoEcommerceContext _context;
@@ -19,34 +19,60 @@ namespace ProyectoEcommerce.Controllers
             _context = context;
         }
 
-        // GET: Buys
+        // ========= ADMIN: listado global =========
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            var proyectoEcommerceContext = _context.Buys.Include(b => b.Customer).Include(b => b.Employee);
-            return View(await proyectoEcommerceContext.ToListAsync());
+            var list = _context.Buys
+                .Include(b => b.Customer)
+                .Include(b => b.Employee)
+                .OrderByDescending(b => b.Fecha);
+
+            return View(await list.ToListAsync());
         }
 
-        // GET: Buys/Details/5
+        // ========= USUARIO: Mis compras (por email) =========
+        // Asumimos que Customer.Email coincide con el correo con el que el usuario inició sesión (Identity)
+        public async Task<IActionResult> My()
+        {
+            var email = User?.Identity?.Name; // Identity usa normalmente el email como Name
+            if (string.IsNullOrWhiteSpace(email))
+                return Challenge(); // fuerza login
+
+            var list = _context.Buys
+                .Include(b => b.Customer)
+                .Include(b => b.Employee)
+                .Where(b => b.Customer.Email == email)
+                .OrderByDescending(b => b.Fecha);
+
+            return View(await list.ToListAsync()); // Views/Buys/My.cshtml
+        }
+
+        // ========= Details: Admin ve todo; usuario solo su compra =========
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var buy = await _context.Buys
                 .Include(b => b.Customer)
                 .Include(b => b.Employee)
                 .FirstOrDefaultAsync(m => m.BuyId == id);
-            if (buy == null)
+
+            if (buy == null) return NotFound();
+
+            // Si NO es Admin, solo puede ver si la compra le pertenece
+            if (!User.IsInRole("Admin"))
             {
-                return NotFound();
+                var email = User?.Identity?.Name;
+                if (string.IsNullOrWhiteSpace(email) || !string.Equals(buy.Customer?.Email, email, System.StringComparison.OrdinalIgnoreCase))
+                    return Forbid(); // 403
             }
 
             return View(buy);
         }
 
-        // GET: Buys/Create
+        // ========= ADMIN: Create/Edit/Delete =========
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email");
@@ -54,117 +80,86 @@ namespace ProyectoEcommerce.Controllers
             return View();
         }
 
-        // POST: Buys/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("BuyId,CustomerId,EmployeeId,Fecha,Subtotal,IVA,Total")] Buy buy)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(buy);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", buy.CustomerId);
+                ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name", buy.EmployeeId);
+                return View(buy);
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", buy.CustomerId);
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name", buy.EmployeeId);
-            return View(buy);
+
+            _context.Add(buy);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Buys/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var buy = await _context.Buys.FindAsync(id);
-            if (buy == null)
-            {
-                return NotFound();
-            }
+            if (buy == null) return NotFound();
+
             ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", buy.CustomerId);
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name", buy.EmployeeId);
             return View(buy);
         }
 
-        // POST: Buys/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("BuyId,CustomerId,EmployeeId,Fecha,Subtotal,IVA,Total")] Buy buy)
         {
-            if (id != buy.BuyId)
+            if (id != buy.BuyId) return NotFound();
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", buy.CustomerId);
+                ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name", buy.EmployeeId);
+                return View(buy);
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(buy);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BuyExists(buy.BuyId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(buy);
+                await _context.SaveChangesAsync();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "Email", buy.CustomerId);
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "EmployeeId", "Name", buy.EmployeeId);
-            return View(buy);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BuyExists(buy.BuyId)) return NotFound();
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Buys/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var buy = await _context.Buys
                 .Include(b => b.Customer)
                 .Include(b => b.Employee)
                 .FirstOrDefaultAsync(m => m.BuyId == id);
-            if (buy == null)
-            {
-                return NotFound();
-            }
+            if (buy == null) return NotFound();
 
             return View(buy);
         }
 
-        // POST: Buys/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var buy = await _context.Buys.FindAsync(id);
-            if (buy != null)
-            {
-                _context.Buys.Remove(buy);
-            }
+            if (buy != null) _context.Buys.Remove(buy);
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BuyExists(int id)
-        {
-            return _context.Buys.Any(e => e.BuyId == id);
-        }
+        private bool BuyExists(int id) => _context.Buys.Any(e => e.BuyId == id);
     }
 }
+

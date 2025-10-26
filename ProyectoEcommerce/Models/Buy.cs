@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProyectoEcommerce.Models
 {
@@ -6,22 +8,24 @@ namespace ProyectoEcommerce.Models
     {
         public int BuyId { get; set; }
 
-        /*[Required(ErrorMessage = "El ID del carro es obligatorio")]
-        public int ShoppingCartId { get; set; }*/
         [Required(ErrorMessage = "El ID del Cliente es obligatorio")]
         public int CustomerId { get; set; }
+
         [Required(ErrorMessage = "El ID del empleado es obligatorio")]
         public int EmployeeId { get; set; }
+
         [DataType(DataType.Date)]
         public DateTime Fecha { get; set; }
+
         public decimal Subtotal { get; set; }
         public decimal IVA { get; set; }
         public decimal Total { get; set; }
 
+        // Propiedades de navegación
         public virtual Customer Customer { get; set; }
         public virtual Employee Employee { get; set; }
 
-        // Muchos a muchos con Product
-        public virtual ICollection<Product> Products { get; set; }
+        // Relación con productos a través de tabla intermedia
+        public virtual ICollection<BuyItem> Items { get; set; }
     }
 }

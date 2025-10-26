@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Identity.Client;
 
 namespace ProyectoEcommerce.Models
 {
@@ -7,12 +6,12 @@ namespace ProyectoEcommerce.Models
     {
         public int ShoppingCartId { get; set; }
         public DateTime CreatedDate { get; set; }
-        public int CustomerId { get; set; }
 
-        // Propiedades de navegación
+        // FK
+        public int CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
 
-        // Relación con productos a través de tabla intermedia
-        public virtual ICollection<ShoppingCartItem> Items { get; set; }
+        // Muchos a muchos con Product
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

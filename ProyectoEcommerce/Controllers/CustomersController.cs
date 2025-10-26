@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProyectoEcommerce.Data;
 using ProyectoEcommerce.Models;
+using System.Security.Claims;
 
 namespace ProyectoEcommerce.Controllers
 {
+    [Authorize] // requiere login por defecto
     public class CustomersController : Controller
     {
         private readonly ProyectoEcommerceContext _context;
@@ -19,139 +20,184 @@ namespace ProyectoEcommerce.Controllers
             _context = context;
         }
 
-        // GET: Customers
+        // ===== ADMIN: listado global =====
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customers.ToListAsync());
+            return View(await _context.Customers.OrderBy(c => c.Name_full).ToListAsync());
         }
 
-        // GET: Customers/Details/5
+        // ===== Perfil del usuario autenticado =====
+        [Authorize]
+        public async Task<IActionResult> Perfil()
+        {
+            var email = User?.Identity?.Name;
+            if (string.IsNullOrWhiteSpace(email)) return Challenge();
+
+            var me = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email);
+
+            // Si no existe, lo creo 
+             if (me == null)
+    {
+        var given   = User.FindFirstValue(ClaimTypes.GivenName); // nombre (si existe)
+        var surname = User.FindFirstValue(ClaimTypes.Surname);   // apellido (si existe)
+        var full = string.Join(" ", new[] { given, surname }
+                                .Where(s => !string.IsNullOrWhiteSpace(s)));
+
+        me = new Customer
+        {
+            Email = email,
+            Name_full = string.IsNullOrWhiteSpace(full) ? null : full
+        };
+        _context.Customers.Add(me);
+        await _context.SaveChangesAsync();
+    }
+
+            return View(me); // Views/Customers/Perfil.cshtml
+        }
+
+
+
+        public async Task<IActionResult> EditarPerfil()
+        {
+            var email = User?.Identity?.Name;
+            if (string.IsNullOrWhiteSpace(email)) return Challenge();
+
+            var me = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email);
+            if (me == null) return NotFound();
+
+            return View( me); // Views/Customers/EditarPerfil.cshtml
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditarPerfil(
+       [Bind("CustomerId,Name_full,Telefono,Direccion")] Customer model) //  Email fuera del Bind
+        {
+            var email = User?.Identity?.Name;
+            if (string.IsNullOrWhiteSpace(email)) return Challenge();
+
+            // 1) busca por Id (si vino bien el hidden)
+            Customer me = null;
+            if (model.CustomerId > 0)
+                me = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == model.CustomerId);
+
+            // 2) fallback por Email de la sesión
+            if (me == null)
+                me = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email);
+
+            if (me == null) return NotFound();
+
+            // seguridad: solo su propio registro
+            if (!string.Equals(me.Email, email, StringComparison.OrdinalIgnoreCase))
+                return Forbid();
+
+            if (!ModelState.IsValid) return View(model);
+
+            // Actualiza campos editables
+            me.Name_full = model.Name_full;
+            
+            me.Telefono = model.Telefono;
+            me.Direccion = model.Direccion;
+
+            await _context.SaveChangesAsync();
+            TempData["ok"] = "Perfil actualizado correctamente.";
+            return RedirectToAction(nameof(Perfil));
+        }
+
+
+        // ===== Details con control de acceso =====
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
-            if (customer == null)
+            var customer = await _context.Customers.FirstOrDefaultAsync(m => m.CustomerId == id);
+            if (customer == null) return NotFound();
+
+            if (!User.IsInRole("Admin"))
             {
-                return NotFound();
+                var email = User?.Identity?.Name;
+                if (string.IsNullOrWhiteSpace(email) ||
+                    !string.Equals(customer.Email, email, StringComparison.OrdinalIgnoreCase))
+                {
+                    return Forbid();
+                }
             }
 
             return View(customer);
         }
 
-        // GET: Customers/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        // ===== CRUD Admin =====
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create() => View();
 
-        // POST: Customers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,Name_full,FechaNacimiento,Email,Telefono,Direccion")] Customer customer)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([Bind("CustomerId,Name_full,Email,Telefono,Direccion")] Customer customer)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(customer);
+            if (!ModelState.IsValid) return View(customer);
+
+            _context.Add(customer);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Customers/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+            if (customer == null) return NotFound();
+
             return View(customer);
         }
 
-        // POST: Customers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,Name_full,FechaNacimiento,Email,Telefono,Direccion")] Customer customer)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,Name_full,Email,Telefono,Direccion")] Customer customer)
         {
-            if (id != customer.CustomerId)
-            {
-                return NotFound();
-            }
+            if (id != customer.CustomerId) return NotFound();
+            if (!ModelState.IsValid) return View(customer);
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CustomerExists(customer.CustomerId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(customer);
+                await _context.SaveChangesAsync();
             }
-            return View(customer);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CustomerExists(customer.CustomerId)) return NotFound();
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Customers/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+            var customer = await _context.Customers.FirstOrDefaultAsync(m => m.CustomerId == id);
+            if (customer == null) return NotFound();
 
             return View(customer);
         }
 
-        // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
-            if (customer != null)
-            {
-                _context.Customers.Remove(customer);
-            }
+            if (customer != null) _context.Customers.Remove(customer);
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CustomerExists(int id)
-        {
-            return _context.Customers.Any(e => e.CustomerId == id);
-        }
+        private bool CustomerExists(int id) => _context.Customers.Any(e => e.CustomerId == id);
     }
 }

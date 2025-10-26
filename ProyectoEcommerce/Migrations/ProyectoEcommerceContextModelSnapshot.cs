@@ -22,6 +22,21 @@ namespace ProyectoEcommerce.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BuyProduct", b =>
+                {
+                    b.Property<int>("BuysBuyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BuysBuyId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("BuyProducts", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -167,12 +182,10 @@ namespace ProyectoEcommerce.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -209,12 +222,10 @@ namespace ProyectoEcommerce.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -222,6 +233,21 @@ namespace ProyectoEcommerce.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("ProductShoppingCart", b =>
+                {
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShoppingCartsShoppingCartId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductsId", "ShoppingCartsShoppingCartId");
+
+                    b.HasIndex("ShoppingCartsShoppingCartId");
+
+                    b.ToTable("ShoppingCartProducts", (string)null);
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Buy", b =>
@@ -244,9 +270,6 @@ namespace ProyectoEcommerce.Migrations
                     b.Property<decimal>("IVA")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Subtotal")
                         .HasColumnType("decimal(18,2)");
 
@@ -259,33 +282,7 @@ namespace ProyectoEcommerce.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("Buys");
-                });
-
-            modelBuilder.Entity("ProyectoEcommerce.Models.BuyItem", b =>
-                {
-                    b.Property<int>("BuyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Subtotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("BuyId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("BuyItems");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Category", b =>
@@ -317,21 +314,20 @@ namespace ProyectoEcommerce.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
 
                     b.Property<string>("Direccion")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FechaNacimiento")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name_full")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
 
                     b.Property<string>("Telefono")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.HasKey("CustomerId");
 
@@ -365,6 +361,41 @@ namespace ProyectoEcommerce.Migrations
                     b.HasKey("EmployeeId");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("ProyectoEcommerce.Models.Faq", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Category", "SortOrder");
+
+                    b.ToTable("Faqs");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Product", b =>
@@ -418,65 +449,26 @@ namespace ProyectoEcommerce.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
                     b.HasKey("ShoppingCartId");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("ShoppingCarts");
                 });
 
-            modelBuilder.Entity("ProyectoEcommerce.Models.ShoppingCartItem", b =>
+            modelBuilder.Entity("BuyProduct", b =>
                 {
-                    b.Property<int>("ShoppingCartId")
-                        .HasColumnType("int");
+                    b.HasOne("ProyectoEcommerce.Models.Buy", null)
+                        .WithMany()
+                        .HasForeignKey("BuysBuyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ShoppingCartId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ShoppingCartItems");
-                });
-
-            modelBuilder.Entity("ProyectoEcommerce.Models.Testimonial", b =>
-                {
-                    b.Property<int>("TestimonialId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestimonialId"));
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
-                    b.HasKey("TestimonialId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Testimonials");
+                    b.HasOne("ProyectoEcommerce.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -530,6 +522,21 @@ namespace ProyectoEcommerce.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProductShoppingCart", b =>
+                {
+                    b.HasOne("ProyectoEcommerce.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProyectoEcommerce.Models.ShoppingCart", null)
+                        .WithMany()
+                        .HasForeignKey("ShoppingCartsShoppingCartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ProyectoEcommerce.Models.Buy", b =>
                 {
                     b.HasOne("ProyectoEcommerce.Models.Customer", "Customer")
@@ -544,32 +551,9 @@ namespace ProyectoEcommerce.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProyectoEcommerce.Models.Product", null)
-                        .WithMany("Buys")
-                        .HasForeignKey("ProductId");
-
                     b.Navigation("Customer");
 
                     b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("ProyectoEcommerce.Models.BuyItem", b =>
-                {
-                    b.HasOne("ProyectoEcommerce.Models.Buy", "Buy")
-                        .WithMany("Items")
-                        .HasForeignKey("BuyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProyectoEcommerce.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Buy");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Product", b =>
@@ -591,46 +575,7 @@ namespace ProyectoEcommerce.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProyectoEcommerce.Models.Product", null)
-                        .WithMany("ShoppingCarts")
-                        .HasForeignKey("ProductId");
-
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("ProyectoEcommerce.Models.ShoppingCartItem", b =>
-                {
-                    b.HasOne("ProyectoEcommerce.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProyectoEcommerce.Models.ShoppingCart", "ShoppingCart")
-                        .WithMany("Items")
-                        .HasForeignKey("ShoppingCartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("ShoppingCart");
-                });
-
-            modelBuilder.Entity("ProyectoEcommerce.Models.Testimonial", b =>
-                {
-                    b.HasOne("ProyectoEcommerce.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("ProyectoEcommerce.Models.Buy", b =>
-                {
-                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("ProyectoEcommerce.Models.Category", b =>
@@ -648,18 +593,6 @@ namespace ProyectoEcommerce.Migrations
             modelBuilder.Entity("ProyectoEcommerce.Models.Employee", b =>
                 {
                     b.Navigation("BuysHandled");
-                });
-
-            modelBuilder.Entity("ProyectoEcommerce.Models.Product", b =>
-                {
-                    b.Navigation("Buys");
-
-                    b.Navigation("ShoppingCarts");
-                });
-
-            modelBuilder.Entity("ProyectoEcommerce.Models.ShoppingCart", b =>
-                {
-                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

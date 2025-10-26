@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProyectoEcommerce.Data;
 
-
+//VERSION CON OPCIONES DE ADMINISTRADOR
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ProyectoEcommerceContext>(o =>
@@ -19,23 +19,16 @@ builder.Services
     })
     .AddEntityFrameworkStores<ProyectoEcommerceContext>()
     .AddDefaultTokenProviders()
-    .AddDefaultUI(); 
+    .AddDefaultUI();              // usa el paquete Identity.UI
 
-
-
-// Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages(); // Para las páginas de Identity
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Inicializar roles y usuario admin
+
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    await DbInitializer.Initialize(services);
-
-
     var sp = scope.ServiceProvider;
     var db = sp.GetRequiredService<ProyectoEcommerceContext>();
     db.Database.Migrate();   // aplica migraciones pendientes
@@ -57,25 +50,21 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
+if (!app.Environment.IsDevelopment()) { app.UseExceptionHandler("/Home/Error"); app.UseHsts(); }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
-app.UseAuthentication(); // IMPORTANTE: antes de UseAuthorization
+app.UseAuthentication();   //  habilita login
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    name: "areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
-app.MapRazorPages(); // Para las páginas de Identity
 
+
+app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapRazorPages();       // expone /Identity/Account/Login
 app.Run();

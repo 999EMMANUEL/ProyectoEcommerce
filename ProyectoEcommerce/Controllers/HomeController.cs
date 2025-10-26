@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoEcommerce.Models;
-using ProyectoEcommerce.Data; // tu DbContext namespace
+using ProyectoEcommerce.Data; //  DbContext namespace
 using Microsoft.EntityFrameworkCore;
 
 namespace ProyectoEcommerce.Controllers

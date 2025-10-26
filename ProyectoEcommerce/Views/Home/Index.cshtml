@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="~/css/maps.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 }
+
+
 @section Scripts {
     <!-- API Key CORREGIDA y optimizada -->
     <script>
         function loadGoogleMaps() {
             const script = document.createElement('script');
-            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyASg-6uv9BAJVu5haLhf3iimD8X1Xhnaas&callback=initMap';
+                    @*script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyASg-6uv9BAJVu5haLhf3iimD8X1Xhnaas&callback=initMap';*@
             script.async = true;
             script.defer = true;
             document.head.appendChild(script);
@@ -78,6 +80,7 @@
 
                     <div class="product-info-clickable">
                         <h3 class="product-name">@item.Name</h3>
+                        @* Si tienes categoría como propiedad, muéstrala. Si no, omítelo. *@
                         @* <p class="product-category">@item.Category</p> *@
                         <p class="product-availability">
                             <span class="status-indicator @(item.Available ? "" : "unavailable")"></span>
@@ -110,17 +113,10 @@
     </div>
 
 </main>
-<a class="" href="https://wa.me/50686770094" target="_blank" rel="noopener noreferrer">
+
 <img src="~/images/Logos/Whats.png" class="whatsapp-btn" title="Contactar por WhatsApp"></img>
-</a>
-<li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Productos</a>
-    <a class="nav-link text-dark" asp-area="" asp-controller="Buys" asp-action="Index">buys</a>
-    <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
-    <a class="nav-link text-dark" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
-    <a class="nav-link text-dark" asp-area="" asp-controller="Employees" asp-action="Index">Employees</a>
-    <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCarts" asp-action="Index">ShoppingCarts</a>
-</li>
+
+
 
 <!-- Reseñas de usuarios ( guía visual — sin lógica ) -->
 <section id="user-reviews" class="user-reviews-section container">

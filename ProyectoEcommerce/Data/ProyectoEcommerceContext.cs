@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ProyectoEcommerce.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ProyectoEcommerce.Data
 {
-    public class ProyectoEcommerceContext : IdentityDbContext<IdentityUser>
+    public class ProyectoEcommerceContext
+       : IdentityDbContext<IdentityUser, IdentityRole, string>
     {
         public ProyectoEcommerceContext(DbContextOptions<ProyectoEcommerceContext> options)
-            : base(options)
-        {
-        }
+            : base(options) { }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -22,50 +21,30 @@ namespace ProyectoEcommerce.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<Buy> Buys { get; set; }
-        public DbSet<Testimonial> Testimonials { get; set; }
-
-        // Nuevas tablas intermedias
-        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
-        public DbSet<BuyItem> BuyItems { get; set; }
+        public DbSet<Faq> Faqs { get; set; }
+       // public DbSet<Admin> Admins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // IMPORTANTE para Identity
+            // 👇 Esto registra TODAS las entidades de Identity, incluyendo IdentityRole
+            base.OnModelCreating(modelBuilder);
+            // Relaciones muchos-a-muchos
+            modelBuilder.Entity<Buy>()
+                    .HasMany(b => b.Products)
+                    .WithMany(p => p.Buys)
+                    .UsingEntity(j => j.ToTable("BuyProducts"));
 
-            // ShoppingCart - Productos (con cantidad)
-            modelBuilder.Entity<ShoppingCartItem>()
-                .HasKey(sci => new { sci.ShoppingCartId, sci.ProductId });
+                modelBuilder.Entity<ShoppingCart>()
+                    .HasMany(sc => sc.Products)
+                    .WithMany(p => p.ShoppingCarts)
+                    .UsingEntity(j => j.ToTable("ShoppingCartProducts"));
 
-            modelBuilder.Entity<ShoppingCartItem>()
-                .HasOne(sci => sci.ShoppingCart)
-                .WithMany(sc => sc.Items)
-                .HasForeignKey(sci => sci.ShoppingCartId);
+            //índice por categoría para ordenar/filtrar rápido
+            modelBuilder.Entity<Faq>()
+                .HasIndex(f => new { f.Category, f.SortOrder });
 
-            modelBuilder.Entity<ShoppingCartItem>()
-                .HasOne(sci => sci.Product)
-                .WithMany()
-                .HasForeignKey(sci => sci.ProductId);
-
-            // Buy - Productos (con cantidad y precio)
-            modelBuilder.Entity<BuyItem>()
-                .HasKey(bi => new { bi.BuyId, bi.ProductId });
-
-            modelBuilder.Entity<BuyItem>()
-                .HasOne(bi => bi.Buy)
-                .WithMany(b => b.Items)
-                .HasForeignKey(bi => bi.BuyId);
-
-            modelBuilder.Entity<BuyItem>()
-                .HasOne(bi => bi.Product)
-                .WithMany()
-                .HasForeignKey(bi => bi.ProductId);
-
-            // Testimonial - Customer
-            modelBuilder.Entity<Testimonial>()
-                .HasOne(t => t.Customer)
-                .WithMany()
-                .HasForeignKey(t => t.CustomerId)
-                .OnDelete(DeleteBehavior.Restrict);
+            base.OnModelCreating(modelBuilder); //  para Identity
         }
+
     }
 }

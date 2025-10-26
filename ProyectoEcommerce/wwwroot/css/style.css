@@ -538,3 +538,17 @@ header {
         right: 20px;
     }
 }
+
+
+
+
+/* Uniformar altura y estética de botones del header */
+.header-top .btn {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: .35rem .75rem;
+}
+
+    .header-top .btn:focus {
+        box-shadow: 0 0 0 .2rem rgba(13,110,253,.25);
+    }
